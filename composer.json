@@ -1,0 +1,31 @@
+{
+  "name": "luguohuakai/srun",
+  "description": "srun soft tools",
+  "keywords": [
+    "srun",
+    "srunsoft",
+    "srunsoft tools",
+    "tools"
+  ],
+  "homepage": "https://github.com/luguohuakai/srun",
+  "type": "project",
+  "license": "BSD-4-Clause",
+  "authors": [
+    {
+      "name": "DM luguohuakai",
+      "email": "769245396@qq.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/luguohuakai/srun/issues",
+    "source": "https://github.com/luguohuakai/srun"
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.0"
+  },
+  "config": {
+    "process-timeout": 1800
+  }
+}
