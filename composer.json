@@ -9,7 +9,7 @@
   ],
   "homepage": "https://github.com/luguohuakai/srun",
   "type": "library",
-  "license": "BSD-4-Clause",
+  "license": "MIT",
   "authors": [
     {
       "name": "DM luguohuakai",
@@ -23,7 +23,12 @@
   },
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-iconv": "*",
+    "ext-mbstring": "*",
+    "ext-redis": "*"
   },
   "config": {
     "process-timeout": 1800
