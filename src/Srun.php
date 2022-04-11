@@ -2,6 +2,7 @@
 
 namespace src;
 
+
 class Srun implements SrunBase
 {
     private $srun_north_api_url = '';
