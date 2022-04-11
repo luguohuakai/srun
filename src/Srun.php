@@ -1,8 +1,6 @@
 <?php
 
-
-namespace src;
-
+namespace srun\src;
 
 class Srun implements SrunBase
 {

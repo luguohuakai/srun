@@ -1,6 +1,6 @@
 <?php
 
-namespace src;
+namespace srun\src;
 
 use DateTime;
 use Exception;
