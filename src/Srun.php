@@ -4,10 +4,18 @@ namespace src;
 
 class Srun implements SrunBase
 {
-    public static $srun_north_api_url = '';
-    public static $srun_north_access_token = '';
-    public static $srun_north_access_token_expire = '7200';
-    public static $srun_north_access_token_redis_key = 'srun_north_access_token_redis';
+    private $srun_north_api_url = '';
+    private $srun_north_access_token = '';
+    private $srun_north_access_token_expire = 7200;
+    private $srun_north_access_token_redis_key = 'srun_north_access_token_redis';
+
+    public function __construct($srun_north_api_url, $srun_north_access_token = null, $srun_north_access_token_expire = null, $srun_north_access_token_redis_key = null)
+    {
+        $this->srun_north_api_url = $srun_north_api_url;
+        if (!$srun_north_access_token) $this->srun_north_access_token = $srun_north_access_token;
+        if (!$srun_north_access_token_expire) $this->srun_north_access_token_expire = $srun_north_access_token_expire;
+        if (!$srun_north_access_token_redis_key) $this->srun_north_access_token_redis_key = $srun_north_access_token_redis_key;
+    }
 
     /**
      * @param $path
@@ -17,15 +25,15 @@ class Srun implements SrunBase
      * @param array $header
      * @return string|object 错误时返回字符串|正确时返回json对象
      */
-    public static function req($path, array $data = [], string $method = 'get', bool $access_token = true, array $header = [])
+    public function req($path, array $data = [], string $method = 'get', bool $access_token = true, array $header = [])
     {
         $method = strtolower($method);
-        $srun_north_api_url = self::$srun_north_api_url;
+        $srun_north_api_url = $this->srun_north_api_url;
         if (!$srun_north_api_url) return 'NORTH INTERFACE ERR';
         $url = "$srun_north_api_url$path";
 
         if ($access_token === true) {
-            $srun_north_access_token = self::accessToken();
+            $srun_north_access_token = $this->accessToken();
             if (!$srun_north_access_token) return 'NORTH INTERFACE ACCESS_TOKEN ERR';
             if ($method === 'get') $url = "$url?access_token=$srun_north_access_token";
             if ($method === 'post') $data['access_token'] = $srun_north_access_token;
@@ -56,7 +64,7 @@ class Srun implements SrunBase
      * @param $order_no
      * @return object|string
      */
-    public static function financialRechargeWallet($user_name, $amount, $order_no)
+    public function financialRechargeWallet($user_name, $amount, $order_no)
     {
         $data = [
             'user_name' => $user_name,
@@ -64,7 +72,7 @@ class Srun implements SrunBase
             'pay_num' => $amount,
             'order_no' => $order_no,
         ];
-        return self::req('api/v1/financial/recharge-wallet', $data, 'post');
+        return $this->req('api/v1/financial/recharge-wallet', $data, 'post');
     }
 
     /**
@@ -72,9 +80,9 @@ class Srun implements SrunBase
      * @param $user_name
      * @return object|string
      */
-    public static function userBalance($user_name)
+    public function userBalance($user_name)
     {
-        return self::req('api/v1/user/balance', ['user_name' => $user_name]);
+        return $this->req('api/v1/user/balance', ['user_name' => $user_name]);
     }
 
     /**
@@ -82,17 +90,17 @@ class Srun implements SrunBase
      * @param $account
      * @return object|string
      */
-    public static function userView($account)
+    public function userView($account)
     {
-        return self::req('api/v1/user/view', ['user_name' => $account]);
+        return $this->req('api/v1/user/view', ['user_name' => $account]);
     }
 
     // (北向接口)添加用户组
-    public static function addGroup($group_name, $parent_name = '/')
+    public function addGroup($group_name, $parent_name = '/')
     {
         $data['name'] = mb_substr($group_name, 0, 100);
         $data['parent_name'] = $parent_name;
-        return self::req('api/v1/groups', $data, 'post');
+        return $this->req('api/v1/groups', $data, 'post');
     }
 
     /**
@@ -100,9 +108,9 @@ class Srun implements SrunBase
      * @param $user_name
      * @return bool
      */
-    public static function userExist($user_name): bool
+    public function userExist($user_name): bool
     {
-        $rs = self::req('api/v1/user/search', ['value' => $user_name, 'type' => 1]);
+        $rs = $this->req('api/v1/user/search', ['value' => $user_name, 'type' => 1]);
         return is_object($rs) && $rs->code === 0;
     }
 
@@ -112,9 +120,9 @@ class Srun implements SrunBase
      * @param $pwd
      * @return bool
      */
-    public static function userRight($user_name, $pwd): bool
+    public function userRight($user_name, $pwd): bool
     {
-        $rs = self::req('api/v1/user/validate-users', ['user_name' => $user_name, 'password' => $pwd], 'post');
+        $rs = $this->req('api/v1/user/validate-users', ['user_name' => $user_name, 'password' => $pwd], 'post');
         return is_object($rs) && $rs->code === 0;
     }
 
@@ -123,15 +131,15 @@ class Srun implements SrunBase
      * @param $user_name
      * @return object|string
      */
-    public static function userDelete($user_name)
+    public function userDelete($user_name)
     {
-        return self::req('api/v1/user/delete', ['user_name' => $user_name], 'delete');
+        return $this->req('api/v1/user/delete', ['user_name' => $user_name], 'delete');
     }
 
     // 查询已订购的产品/套餐接口
-    public static function usersPackages($user_name)
+    public function usersPackages($user_name)
     {
-        return self::req('api/v1/package/users-packages', ['user_name' => $user_name]);
+        return $this->req('api/v1/package/users-packages', ['user_name' => $user_name]);
     }
 
     /**
@@ -145,7 +153,7 @@ class Srun implements SrunBase
      * @param array $other
      * @return object|string
      */
-    public static function addUser($user_name, string $user_real_name = '', string $user_password = '123456', int $products_id = 1, int $group_id = 1, string $mgr_name_create = 'SrunMeeting', array $other = [])
+    public function addUser($user_name, string $user_real_name = '', string $user_password = '123456', int $products_id = 1, int $group_id = 1, string $mgr_name_create = 'SrunMeeting', array $other = [])
     {
         $data = [
             'user_name' => $user_name,
@@ -156,7 +164,7 @@ class Srun implements SrunBase
             'mgr_name_create' => $mgr_name_create
         ];
         if (!empty($other)) $data = array_merge($data, $other);
-        return self::req('api/v1/users', $data, 'post');
+        return $this->req('api/v1/users', $data, 'post');
     }
 
     /**
@@ -170,7 +178,7 @@ class Srun implements SrunBase
      * @param array $other
      * @return object|string
      */
-    public static function addUserCumt($user_name, string $user_real_name = '', string $user_password = '123456', int $products_id = 1, int $group_id = 1, string $mgr_name_create = 'SrunMeeting', array $other = [])
+    public function addUserCumt($user_name, string $user_real_name = '', string $user_password = '123456', int $products_id = 1, int $group_id = 1, string $mgr_name_create = 'SrunMeeting', array $other = [])
     {
         $data = [
             'user_name' => $user_name,
@@ -184,22 +192,22 @@ class Srun implements SrunBase
         if (!empty($other)) $data = array_merge($data, $other);
         if (!$data['group_id']) $data['group_id'] = '2';
         if (!$data['sex']) $data['sex'] = '0';
-        return self::req('api/cumt/user/sync', $data, 'post');
+        return $this->req('api/cumt/user/sync', $data, 'post');
     }
 
     /**
      * 获取北向接口令牌
      * @return mixed|bool|string
      */
-    public static function accessToken()
+    public function accessToken()
     {
-        if (self::$srun_north_access_token) return self::$srun_north_access_token;
-        $access_token = Func::Rds()->get(self::$srun_north_access_token_redis_key);
+        if ($this->srun_north_access_token) return $this->srun_north_access_token;
+        $access_token = Func::Rds()->get($this->srun_north_access_token_redis_key);
         if ($access_token) return $access_token;
-        $rs = self::req('api/v1/auth/get-access-token', [], 'get', false);
+        $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
         if (isset($rs->data) && isset($rs->data->access_token)) {
             // 缓存令牌
-            Func::Rds()->setex(self::$srun_north_access_token_redis_key, self::$srun_north_access_token_expire, $rs->data->access_token);
+            Func::Rds()->setex($this->srun_north_access_token_redis_key, $this->srun_north_access_token_expire, $rs->data->access_token);
             return $rs->data->access_token;
         } else {
             return false;
@@ -211,7 +219,7 @@ class Srun implements SrunBase
      * @param $post_data
      * @return mixed
      */
-    static function postSso($url, $post_data)
+    function postSso($url, $post_data)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // https请求 不验证证书和hosts
@@ -241,7 +249,7 @@ class Srun implements SrunBase
     }
 
     // 单点认证 上线
-    public static function ssoLogin($auth_addr, $secret, $user_name, $ip, $ac_id = null): string
+    public function ssoLogin($auth_addr, $secret, $user_name, $ip, $ac_id = null): string
     {
         $time = time();
         $data = [
@@ -258,13 +266,13 @@ class Srun implements SrunBase
             'password' => md5($secret . $time . $user_name . $ip . $time . $secret),
         ];
         if ($ac_id !== null) $data['ac_id'] = $ac_id;
-        $rs = self::postSso($auth_addr, $data);
+        $rs = $this->postSso($auth_addr, $data);
         $json = is_object($rs) ? $rs : json_decode($rs);
         if ($json && !isset($json->_err)) {
             // 判断成功还是失败
-            $auth_msg = self::getAuthMsg($json);
+            $auth_msg = $this->getAuthMsg($json);
             if (isset($auth_msg['success'])) {
-                self::keyHandleLog('认证成功,异步通知成功');
+                $this->keyHandleLog('认证成功,异步通知成功');
                 return Func::success($json);
             }
             if (isset($auth_msg['fail'])) return Func::fail($json, $auth_msg['fail']);
@@ -275,7 +283,7 @@ class Srun implements SrunBase
     }
 
     // 单点认证 下线
-    public static function ssoDrop($auth_addr, $secret, $user_name, $ip, $ac_id = null): string
+    public function ssoDrop($auth_addr, $secret, $user_name, $ip, $ac_id = null): string
     {
         $time = time();
         $data = [
@@ -289,13 +297,13 @@ class Srun implements SrunBase
             'password' => md5($secret . $time . $user_name . $ip . $time . $secret),
         ];
         if ($ac_id !== null) $data['ac_id'] = $ac_id;
-        $rs = self::postSso($auth_addr, $data);
+        $rs = $this->postSso($auth_addr, $data);
         $json = is_object($rs) ? $rs : json_decode($rs);
         if ($json && !isset($json->_err)) {
             // 判断成功还是失败
-            $auth_msg = self::getAuthMsg($json);
+            $auth_msg = $this->getAuthMsg($json);
             if (isset($auth_msg['success'])) {
-                self::keyHandleLog('退出成功');
+                $this->keyHandleLog('退出成功');
                 return Func::success($json);
             }
             if (isset($auth_msg['fail'])) return Func::fail($json, $auth_msg['fail']);
@@ -306,8 +314,9 @@ class Srun implements SrunBase
     }
 
 
-    public static $sso_secret;
-    public static $sso_auth_url;
+    public $sso_secret;
+    public $sso_auth_url;
+
     /**
      * 单点认证 发起认证请求/下线
      * @param string $username 上网账号
@@ -316,11 +325,11 @@ class Srun implements SrunBase
      * @param null $drop null:认证 1:下线
      * @return string
      */
-    public static function sso(string $username, string $ip, $ac_id = null, $drop = null): string
+    public function sso(string $username, string $ip, $ac_id = null, $drop = null): string
     {
         $time = time();
         // 注意: 需要先在params.php配置
-        $secret = self::$sso_secret;
+        $secret = $this->sso_secret;
         $data = [
             'action' => 'login',
             'api_auth' => 1,
@@ -340,14 +349,14 @@ class Srun implements SrunBase
             unset($data['pop']);
         }
         // 注意: 需要先在params.php配置
-        $rs = self::postSso(self::$sso_auth_url . 'cgi-bin/srun_portal', $data);
+        $rs = $this->postSso($this->sso_auth_url . 'cgi-bin/srun_portal', $data);
         if (!$rs) return Func::fail($data, '请求失败');
         if (isset($rs->_err)) return Func::fail($data, $rs->_err);
         $rs = is_object($rs) ? $rs : json_decode($rs);
         // 判断成功还是失败
-        $auth_msg = self::getAuthMsg($rs);
+        $auth_msg = $this->getAuthMsg($rs);
         if (isset($auth_msg['success'])) {
-            self::keyHandleLog("drop={$drop}操作成功");
+            $this->keyHandleLog("drop={$drop}操作成功");
             return Func::success($rs);
         }
         if (isset($auth_msg['fail'])) return Func::fail($rs, $auth_msg['fail']);
@@ -364,7 +373,7 @@ class Srun implements SrunBase
      * @param $rs
      * @return array 成功: ['success' => 'xxx'] 失败: ['fail' => 'xxx']
      */
-    public static function getAuthMsg($rs): array
+    public function getAuthMsg($rs): array
     {
         $fail = true;
         $msg = '失败';
@@ -499,7 +508,7 @@ class Srun implements SrunBase
      * @param bool $next 是否前置换行
      * @param string $file 保存的文件路径及名称
      */
-    public static function keyHandleLog($msg, bool $next = false, string $file = '')
+    public function keyHandleLog($msg, bool $next = false, string $file = '')
     {
         if ($file === '') $file = '/temp/key_handle_ali_' . date('Y-m', time()) . '.log';
         $log = Func::dt() . " $msg\r\n";
@@ -508,19 +517,19 @@ class Srun implements SrunBase
     }
 
     // 获取当前在线终端数量接口
-    public static function getOnlineTotal()
+    public function getOnlineTotal()
     {
-        return self::req('api/v1/base/get-online-total');
+        return $this->req('api/v1/base/get-online-total');
     }
 
     // 查询在线设备接口
-    public static function onlineEquipment($user_name = null, $user_ip = null, $user_mac = null)
+    public function onlineEquipment($user_name = null, $user_ip = null, $user_mac = null)
     {
         if ($user_mac !== null) $data = ['user_mac' => $user_mac];
         if ($user_ip !== null) $data = ['user_ip' => $user_ip];
         if ($user_name !== null) $data = ['user_name' => $user_name];
         if (!isset($data)) return '参数不正确';
-        return self::req('api/v1/base/online-equipment', $data);
+        return $this->req('api/v1/base/online-equipment', $data);
     }
 
     /**
@@ -535,18 +544,18 @@ class Srun implements SrunBase
      * @param int $user_available
      * @return object|string
      */
-    public static function userStatusControl($user_name, int $user_available = 1)
+    public function userStatusControl($user_name, int $user_available = 1)
     {
-        return self::req('api/v1/user/user-status-control', [
+        return $this->req('api/v1/user/user-status-control', [
             'user_name' => $user_name,
             'user_available' => $user_available
         ], 'post');
     }
 
     // 修改最大在线数接口
-    public static function maxOnlineNum($user_name, $num)
+    public function maxOnlineNum($user_name, $num)
     {
-        return self::req('api/v1/user/max-online-num', [
+        return $this->req('api/v1/user/max-online-num', [
             'user_name' => $user_name,
             'max_online_num' => $num
         ], 'post');
