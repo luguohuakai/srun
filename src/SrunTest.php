@@ -2,23 +2,23 @@
 
 namespace srun\src;
 
-require_once 'FuncBase.php';
-require_once 'Func.php';
-require_once 'SrunBase.php';
+use func\src\Func;
+
+require_once '../base/Srun.php';
 require_once 'Srun.php';
 
 // 可以先在自己项目中先初始化再调用
-function init(): Srun
+function initUser(): User
 {
     $ini = parse_ini_file('./srun.ini');
-    return new Srun($ini['srun_north_api_url']);
+    return new User($ini['srun_north_api_url']);
 }
 
-$res = init()->userBalance('srun');
+$res = initUser()->userBalance('srun');
 Func::dd($res);
 
 // 也可以直接调用
 $ini = parse_ini_file('./srun.ini');
-$srun = new Srun($ini['srun_north_api_url']);
-$res = $srun->userBalance('srun');
+$user = new User($ini['srun_north_api_url']);
+$res = $user->userBalance('srun');
 Func::dd($res);

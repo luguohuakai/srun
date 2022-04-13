@@ -28,7 +28,8 @@
     "ext-json": "*",
     "ext-iconv": "*",
     "ext-mbstring": "*",
-    "ext-redis": "*"
+    "ext-redis": "*",
+    "luguohuakai/func": "dev-main"
   },
   "config": {
     "process-timeout": 1800
