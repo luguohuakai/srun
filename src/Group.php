@@ -22,19 +22,19 @@ class Group extends Srun implements \srun\base\Group
      * @param $id
      * @param $per_page
      * @param $page
-     * @return mixed
+     * @return object|string
      */
     public function view($name = null, $id = null, $per_page = null, $page = null)
     {
-        // TODO: Implement view() method.
+        return $this->req('');
     }
 
     /**
      * @param $group_id
-     * @return mixed
+     * @return object|string
      */
     public function Subscribe($group_id)
     {
-        // TODO: Implement Subscribe() method.
+        return $this->req('');
     }
 }

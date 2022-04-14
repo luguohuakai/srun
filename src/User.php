@@ -132,11 +132,11 @@ class User extends Srun implements \srun\base\User
      * @param $event_id
      * @param string $user_real_name
      * @param string $user_password
-     * @return mixed
+     * @return object|string
      */
     public function eventVisitor($user_name, $event_id, string $user_real_name = '', string $user_password = '123456')
     {
-        // TODO: Implement addEventVisitor() method.
+        return $this->req('', ['user_name' => $user_name, 'event_id' => $event_id, 'user_real_name' => $user_real_name, 'user_password' => $user_password], 'post');
     }
 
     /**
@@ -145,11 +145,11 @@ class User extends Srun implements \srun\base\User
      * @param string $user_password
      * @param string $mgr_name_create
      * @param array $other
-     * @return mixed
+     * @return object|string
      */
     public function addVisitor($user_name, string $user_real_name = '', string $user_password = '123456', string $mgr_name_create = 'SrunApi', array $other = [])
     {
-        // TODO: Implement addVisitor() method.
+        return $this->req('');
     }
 
     /**
@@ -158,11 +158,11 @@ class User extends Srun implements \srun\base\User
      * @param string $user_real_name
      * @param string $user_password
      * @param string $mgr_name_create
-     * @return mixed
+     * @return object|string
      */
     public function addInviteVisitor($user_name, $invite_code, string $user_real_name = '', string $user_password = '123456', string $mgr_name_create = 'SrunApi')
     {
-        // TODO: Implement addInviteVisitor() method.
+        return $this->req('');
     }
 
     /**
@@ -172,21 +172,21 @@ class User extends Srun implements \srun\base\User
      * @param $cert_num
      * @param $phone
      * @param $address
-     * @return mixed
+     * @return object|string
      */
     public function update($user_name, string $user_real_name = '', $email = null, $cert_num = null, $phone = null, $address = null)
     {
-        // TODO: Implement userUpdate() method.
+        return $this->req('');
     }
 
     /**
      * @param $value
      * @param int $type
-     * @return mixed
+     * @return object|string
      */
     public function search($value, int $type = 1)
     {
-        // TODO: Implement userSearch() method.
+        return $this->req('');
     }
 
     /**
@@ -198,11 +198,11 @@ class User extends Srun implements \srun\base\User
      * @param $email
      * @param $per_page
      * @param $page
-     * @return mixed
+     * @return object|string
      */
     public function superSearch($user_name = null, $user_real_name = null, $cert_num = null, $address = null, $phone = null, $email = null, $per_page = null, $page = null)
     {
-        // TODO: Implement superSearch() method.
+        return $this->req('');
     }
 
     /**
@@ -211,32 +211,32 @@ class User extends Srun implements \srun\base\User
      * @param $user_ip
      * @param $per_page
      * @param $page
-     * @return mixed
+     * @return object|string
      */
     public function detail($user_name = null, $add_time = null, $user_ip = null, $per_page = null, $page = null)
     {
-        // TODO: Implement detail() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $old_password
      * @param $new_password
-     * @return mixed
+     * @return object|string
      */
     public function resetPassword($user_name, $old_password, $new_password)
     {
-        // TODO: Implement resetPassword() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $new_password
-     * @return mixed
+     * @return object|string
      */
     public function superResetPassword($user_name, $new_password)
     {
-        // TODO: Implement superResetPassword() method.
+        return $this->req('');
     }
 
     /**
@@ -244,62 +244,62 @@ class User extends Srun implements \srun\base\User
      * @param $verify_code
      * @param $new_password
      * @param $way
-     * @return mixed
+     * @return object|string
      */
     public function forgetResetPassword($user_name, $verify_code, $new_password, $way)
     {
-        // TODO: Implement forgetResetPassword() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $way
-     * @return mixed
+     * @return object|string
      */
     public function code($user_name, $way)
     {
-        // TODO: Implement code() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $phone
-     * @return mixed
+     * @return object|string
      */
     public function sendCode($user_name, $phone = null)
     {
-        // TODO: Implement sendCode() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $phone
      * @param $verify_code
-     * @return mixed
+     * @return object|string
      */
     public function bindingPhone($user_name, $phone, $verify_code)
     {
-        // TODO: Implement bindingPhone() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $drop_type
      * @param $rad_online_id
-     * @return mixed
+     * @return object|string
      */
     public function onlineDrop($user_name, $drop_type, $rad_online_id)
     {
-        // TODO: Implement onlineDrop() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
-     * @return mixed
+     * @return object|string
      */
     public function batchOnlineDrop($user_name)
     {
-        // TODO: Implement batchOnlineDrop() method.
+        return $this->req('');
     }
 
     /**
@@ -307,71 +307,71 @@ class User extends Srun implements \srun\base\User
      * @param $group_id
      * @param $product
      * @param int $user_available
-     * @return mixed
+     * @return object|string
      */
     public function statusControlBatch($type, $group_id, $product, int $user_available = 1)
     {
-        // TODO: Implement statusControlBatch() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
-     * @return mixed
+     * @return object|string
      */
     public function getPassword($user_name)
     {
-        // TODO: Implement getPassword() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $password
-     * @return mixed
+     * @return object|string
      */
     public function validate($user_name, $password)
     {
-        // TODO: Implement validate() method.
+        return $this->req('');
     }
 
     /**
      * @param $username
      * @param $password
-     * @return mixed
+     * @return object|string
      */
     public function validateManager($username, $password)
     {
-        // TODO: Implement validateManager() method.
+        return $this->req('');
     }
 
     /**
      * @param $username
      * @param $password
      * @param $new_password
-     * @return mixed
+     * @return object|string
      */
     public function resetPasswordManager($username, $password, $new_password)
     {
-        // TODO: Implement resetPasswordManager() method.
+        return $this->req('');
     }
 
     /**
      * @param $domain
      * @param $auth_type
      * @param $type
-     * @return mixed
+     * @return object|string
      */
     public function auth($domain, $auth_type, $type)
     {
-        // TODO: Implement auth() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
-     * @return mixed
+     * @return object|string
      */
     public function macs($user_name)
     {
-        // TODO: Implement macs() method.
+        return $this->req('');
     }
 
     /**
@@ -379,21 +379,21 @@ class User extends Srun implements \srun\base\User
      * @param $mac_address
      * @param $device_name
      * @param $device_type
-     * @return mixed
+     * @return object|string
      */
     public function createMac($user_name, $mac_address, $device_name, $device_type)
     {
-        // TODO: Implement createMac() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $mac_address
-     * @return mixed
+     * @return object|string
      */
     public function deleteMac($user_name, $mac_address)
     {
-        // TODO: Implement deleteMac() method.
+        return $this->req('');
     }
 
     /**
@@ -402,11 +402,11 @@ class User extends Srun implements \srun\base\User
      * @param $new_address
      * @param $device_name
      * @param $device_type
-     * @return mixed
+     * @return object|string
      */
     public function updateMac($user_name, $old_address, $new_address, $device_name = null, $device_type = null)
     {
-        // TODO: Implement updateMac() method.
+        return $this->req('');
     }
 
     /**
@@ -414,40 +414,40 @@ class User extends Srun implements \srun\base\User
      * @param $type
      * @param $old_vlan
      * @param $new_vlan
-     * @return mixed
+     * @return object|string
      */
     public function updateVlan($user_name, $type, $old_vlan, $new_vlan)
     {
-        // TODO: Implement updateVlan() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $mac_address
-     * @return mixed
+     * @return object|string
      */
     public function createMacAuth($user_name, $mac_address)
     {
-        // TODO: Implement createMacAuth() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $mac_address
-     * @return mixed
+     * @return object|string
      */
     public function deleteMacAuth($user_name, $mac_address)
     {
-        // TODO: Implement deleteMacAuth() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
-     * @return mixed
+     * @return object|string
      */
     public function listMacAuth($user_name)
     {
-        // TODO: Implement listMacAuth() method.
+        return $this->req('');
     }
 
     /**
@@ -455,11 +455,11 @@ class User extends Srun implements \srun\base\User
      * @param $device_name
      * @param $mac_address
      * @param $new_address
-     * @return mixed
+     * @return object|string
      */
     public function updateMacAuth($user_name, $device_name, $mac_address, $new_address = null)
     {
-        // TODO: Implement updateMacAuth() method.
+        return $this->req('');
     }
 
     /**
@@ -468,11 +468,11 @@ class User extends Srun implements \srun\base\User
      * @param $effective_at
      * @param $num
      * @param $generate_num
-     * @return mixed
+     * @return object|string
      */
     public function createInvite($user_name, $expire_at, $effective_at = null, $num = null, $generate_num = null)
     {
-        // TODO: Implement createInvite() method.
+        return $this->req('');
     }
 
     /**
@@ -480,49 +480,49 @@ class User extends Srun implements \srun\base\User
      * @param $code
      * @param $page
      * @param $per_page
-     * @return mixed
+     * @return object|string
      */
     public function viewInvite($user_name, $code, $page = null, $per_page = null)
     {
-        // TODO: Implement viewInvite() method.
+        return $this->req('');
     }
 
     /**
      * @param $code
      * @param $used_by
-     * @return mixed
+     * @return object|string
      */
     public function useInvite($code, $used_by)
     {
-        // TODO: Implement useInvite() method.
+        return $this->req('');
     }
 
     /**
      * @param $code
      * @param $used_by
-     * @return mixed
+     * @return object|string
      */
     public function disabledInvite($code, $used_by)
     {
-        // TODO: Implement disabledInvite() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
-     * @return mixed
+     * @return object|string
      */
     public function checkModifyPassword($user_name)
     {
-        // TODO: Implement checkModifyPassword() method.
+        return $this->req('');
     }
 
     /**
      * @param $random
-     * @return mixed
+     * @return object|string
      */
     public function viewEventVisitor($random)
     {
-        // TODO: Implement viewEventVisitor() method.
+        return $this->req('');
     }
 
     /**
@@ -534,29 +534,29 @@ class User extends Srun implements \srun\base\User
      * @param $portal_ip
      * @param $ac_id
      * @param array $other
-     * @return mixed
+     * @return object|string
      */
     public function addEventVisitor($event_name, $start_at, $stop_at, $product_id, $group_id, $portal_ip, $ac_id, array $other = [])
     {
-        // TODO: Implement addEventVisitor() method.
+        return $this->req('');
     }
 
     /**
      * @param $event_name
      * @param array $other
-     * @return mixed
+     * @return object|string
      */
     public function updateEventVisitor($event_name, array $other = [])
     {
-        // TODO: Implement updateEventVisitor() method.
+        return $this->req('');
     }
 
     /**
      * @param $event_name
-     * @return mixed
+     * @return object|string
      */
     public function deleteEventVisitor($event_name)
     {
-        // TODO: Implement deleteEventVisitor() method.
+        return $this->req('');
     }
 }

@@ -32,11 +32,11 @@ class Financial extends Srun implements \srun\base\Financial
      * @param $start_at
      * @param $stop_at
      * @param $pay_type_id
-     * @return mixed
+     * @return object|string
      */
     public function paymentRecord($user_name, $order_no = null, $start_at = null, $stop_at = null, $pay_type_id = null)
     {
-        // TODO: Implement paymentRecord() method.
+        return $this->req('');
     }
 
     /**
@@ -46,33 +46,33 @@ class Financial extends Srun implements \srun\base\Financial
      * @param $mgr_name
      * @param $start_at
      * @param $stop_at
-     * @return mixed
+     * @return object|string
      */
     public function refund($user_name, $refund_num = null, $product_id = null, $mgr_name = null, $start_at = null, $stop_at = null)
     {
-        // TODO: Implement refund() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $start_at
      * @param $stop_at
-     * @return mixed
+     * @return object|string
      */
     public function checkoutListDetail($user_name, $start_at = null, $stop_at = null)
     {
-        // TODO: Implement checkoutListDetail() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $amount
      * @param $transfer_account
-     * @return mixed
+     * @return object|string
      */
     public function transfer($user_name, $amount, $transfer_account)
     {
-        // TODO: Implement transfer() method.
+        return $this->req('');
     }
 
     /**
@@ -88,21 +88,21 @@ class Financial extends Srun implements \srun\base\Financial
     /**
      * @param $ka_card_num
      * @param $ka_passwd
-     * @return mixed
+     * @return object|string
      */
     public function rechargeCard($ka_card_num, $ka_passwd)
     {
-        // TODO: Implement rechargeCard() method.
+        return $this->req('');
     }
 
     /**
      * @param $extra_pay_id
      * @param array $other
-     * @return mixed
+     * @return object|string
      */
     public function extraPay($extra_pay_id, array $other = [])
     {
-        // TODO: Implement extraPay() method.
+        return $this->req('');
     }
 
     /**
@@ -112,41 +112,41 @@ class Financial extends Srun implements \srun\base\Financial
      * @param $buy_time
      * @param $pay_type
      * @param $remark
-     * @return mixed
+     * @return object|string
      */
     public function paymentDataSync($user_name, $trade_no, $money, $buy_time, $pay_type, $remark = null)
     {
-        // TODO: Implement paymentDataSync() method.
+        return $this->req('');
     }
 
     /**
      * @param $pay_type_id
      * @param $start_time
      * @param $stop_time
-     * @return mixed
+     * @return object|string
      */
     public function paymentOverview($pay_type_id, $start_time = null, $stop_time = null)
     {
-        // TODO: Implement paymentOverview() method.
+        return $this->req('');
     }
 
     /**
-     * @return mixed
+     * @return object|string
      */
     public function payType()
     {
-        // TODO: Implement payType() method.
+        return $this->req('');
     }
 
     /**
      * @param $type_name
      * @param $default
      * @param $is_balance
-     * @return mixed
+     * @return object|string
      */
     public function createPayment($type_name, $default = null, $is_balance = null)
     {
-        // TODO: Implement createPayment() method.
+        return $this->req('');
     }
 
     /**
@@ -154,30 +154,30 @@ class Financial extends Srun implements \srun\base\Financial
      * @param $type_name
      * @param $default
      * @param $is_balance
-     * @return mixed
+     * @return object|string
      */
     public function updatePayment($pay_type_id, $type_name = null, $default = null, $is_balance = null)
     {
-        // TODO: Implement updatePayment() method.
+        return $this->req('');
     }
 
     /**
      * @param $pay_type_id
-     * @return mixed
+     * @return object|string
      */
     public function deletePayment($pay_type_id)
     {
-        // TODO: Implement deletePayment() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $start_at
      * @param $stop_at
-     * @return mixed
+     * @return object|string
      */
     public function packageRechargeRecord($user_name, $start_at = null, $stop_at = null)
     {
-        // TODO: Implement packageRechargeRecord() method.
+        return $this->req('');
     }
 }

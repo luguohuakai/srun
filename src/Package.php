@@ -17,33 +17,33 @@ class Package extends Srun implements \srun\base\Package
 
     /**
      * @param $user_name
-     * @return mixed
+     * @return object|string
      */
     public function package($user_name)
     {
-        // TODO: Implement package() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product
      * @param $package
-     * @return mixed
+     * @return object|string
      */
     public function Buy($user_name, $product, $package)
     {
-        // TODO: Implement Buy() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product
      * @param $package
-     * @return mixed
+     * @return object|string
      */
     public function BuySuper($user_name, $product, $package)
     {
-        // TODO: Implement BuySuper() method.
+        return $this->req('');
     }
 
     /**
@@ -53,11 +53,11 @@ class Package extends Srun implements \srun\base\Package
      * @param $order_no
      * @param $product
      * @param $package
-     * @return mixed
+     * @return object|string
      */
     public function Buy2($user_name, $pay_type_id, $pay_num, $order_no, $product, $package)
     {
-        // TODO: Implement Buy2() method.
+        return $this->req('');
     }
 
     /**
@@ -65,10 +65,10 @@ class Package extends Srun implements \srun\base\Package
      * @param $package
      * @param $group_id
      * @param $product
-     * @return mixed
+     * @return object|string
      */
     public function Batch($type, $package, $group_id = null, $product = null)
     {
-        // TODO: Implement Batch() method.
+        return $this->req('');
     }
 }

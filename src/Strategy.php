@@ -15,20 +15,20 @@ class Strategy extends Srun implements \srun\base\Strategy
      * @param $billing_unit
      * @param $billing_rate
      * @param array $other
-     * @return mixed
+     * @return object|string
      */
     public function billingCreate($billing_name, $billing_num, $billing_unit, $billing_rate, array $other = [])
     {
-        // TODO: Implement billingCreate() method.
+        return $this->req('');
     }
 
     /**
      * @param $control_name
      * @param array $other
-     * @return mixed
+     * @return object|string
      */
     public function controlCreate($control_name, array $other = [])
     {
-        // TODO: Implement controlCreate() method.
+        return $this->req('');
     }
 }

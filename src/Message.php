@@ -15,59 +15,59 @@ class Message extends Srun implements \srun\base\Message
      * @param $subject
      * @param $target
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function notice($account, $receive_type, $subject, $target = null, $product_id = null)
     {
-        // TODO: Implement notice() method.
+        return $this->req('');
     }
 
     /**
      * @param $type
      * @param $sys_mgr_user_name
-     * @return mixed
+     * @return object|string
      */
     public function message($type = null, $sys_mgr_user_name = null)
     {
-        // TODO: Implement message() method.
+        return $this->req('');
     }
 
     /**
      * @param array $param
-     * @return mixed
+     * @return object|string
      */
     public function newMessage(array $param = [])
     {
-        // TODO: Implement newMessage() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $key_name
-     * @return mixed
+     * @return object|string
      */
     public function keyEvent($user_name, $key_name)
     {
-        // TODO: Implement keyEvent() method.
+        return $this->req('');
     }
 
     /**
      * @param $eventSource
      * @param $eventType
      * @param $variable
-     * @return mixed
+     * @return object|string
      */
     public function keyThird($eventSource, $eventType, $variable)
     {
-        // TODO: Implement keyThird() method.
+        return $this->req('');
     }
 
     /**
      * @param $key_name
-     * @return mixed
+     * @return object|string
      */
     public function keyView($key_name)
     {
-        // TODO: Implement keyView() method.
+        return $this->req('');
     }
 }

@@ -16,11 +16,11 @@ class Alipay extends Srun implements \srun\base\Alipay
      * @param $money
      * @param $notify_type
      * @param $return_url
-     * @return mixed
+     * @return object|string
      */
     public function pay($out_trade_no, $order_name, $desc, $money, $notify_type, $return_url)
     {
-        // TODO: Implement pay() method.
+        return $this->req('');
     }
 
     /**
@@ -31,10 +31,10 @@ class Alipay extends Srun implements \srun\base\Alipay
      * @param $payment
      * @param $trade_no
      * @param $remark
-     * @return mixed
+     * @return object|string
      */
     public function writeLog($user_name, $out_trade_no, $money, $status, $payment = null, $trade_no = null, $remark = null)
     {
-        // TODO: Implement writeLog() method.
+        return $this->req('');
     }
 }

@@ -11,10 +11,10 @@ class Setting extends Srun implements \srun\base\Setting
 
     /**
      * @param $language
-     * @return mixed
+     * @return object|string
      */
     public function settingLanguage($language)
     {
-        // TODO: Implement settingLanguage() method.
+        return $this->req('');
     }
 }

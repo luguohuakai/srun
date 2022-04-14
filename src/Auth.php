@@ -10,18 +10,18 @@ class Auth extends Srun implements \srun\base\Auth
     }
 
     /**
-     * @return mixed
+     * @return object|string
      */
     public function getAccessToken()
     {
-        // TODO: Implement getAccessToken() method.
+        return $this->req('');
     }
 
     /**
-     * @return mixed
+     * @return object|string
      */
     public function getVersion()
     {
-        // TODO: Implement getVersion() method.
+        return $this->req('');
     }
 }

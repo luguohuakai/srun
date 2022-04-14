@@ -16,20 +16,20 @@ class Product extends Srun implements \srun\base\Product
      * @param $binding_mode
      * @param $checkout_mode
      * @param $condition
-     * @return mixed
+     * @return object|string
      */
     public function create($product_name, $billing_id, $control_id, $binding_mode, $checkout_mode, $condition)
     {
-        // TODO: Implement create() method.
+        return $this->req('');
     }
 
     /**
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function delete($product_id)
     {
-        // TODO: Implement delete() method.
+        return $this->req('');
     }
 
     /**
@@ -40,46 +40,46 @@ class Product extends Srun implements \srun\base\Product
      * @param $binding_mode
      * @param $checkout_mode
      * @param $condition
-     * @return mixed
+     * @return object|string
      */
     public function update($product_id, $product_name, $billing_id, $control_id, $binding_mode, $checkout_mode, $condition)
     {
-        // TODO: Implement update() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
-     * @return mixed
+     * @return object|string
      */
     public function canSubscribe($user_name)
     {
-        // TODO: Implement canSubscribe() method.
+        return $this->req('');
     }
 
     /**
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function useNumber($product_id)
     {
-        // TODO: Implement useNumber() method.
+        return $this->req('');
     }
 
     /**
-     * @return mixed
+     * @return object|string
      */
     public function index()
     {
-        // TODO: Implement index() method.
+        return $this->req('');
     }
 
     /**
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function view($product_id)
     {
-        // TODO: Implement view() method.
+        return $this->req('');
     }
 
     /**
@@ -87,22 +87,22 @@ class Product extends Srun implements \srun\base\Product
      * @param $amount
      * @param $product
      * @param $transfer_account
-     * @return mixed
+     * @return object|string
      */
     public function recharge($user_name, $amount, $product = null, $transfer_account = null)
     {
-        // TODO: Implement recharge() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product
      * @param array $other
-     * @return mixed
+     * @return object|string
      */
     public function rechargeSuper($user_name, $product = null, array $other = [])
     {
-        // TODO: Implement rechargeSuper() method.
+        return $this->req('');
     }
 
     /**
@@ -110,22 +110,22 @@ class Product extends Srun implements \srun\base\Product
      * @param $product
      * @param $amount
      * @param $is_use
-     * @return mixed
+     * @return object|string
      */
     public function subscribe($user_name, $product, $amount = null, $is_use = null)
     {
-        // TODO: Implement subscribe() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product_id_form
      * @param $product_id_to
-     * @return mixed
+     * @return object|string
      */
     public function nextBillingCycle($user_name, $product_id_form, $product_id_to)
     {
-        // TODO: Implement nextBillingCycle() method.
+        return $this->req('');
     }
 
     /**
@@ -133,11 +133,11 @@ class Product extends Srun implements \srun\base\Product
      * @param $product_id_form
      * @param $product_id_to
      * @param $checkout_type
-     * @return mixed
+     * @return object|string
      */
     public function transfer($user_name, $product_id_form, $product_id_to, $checkout_type = null)
     {
-        // TODO: Implement transfer() method.
+        return $this->req('');
     }
 
     /**
@@ -145,51 +145,51 @@ class Product extends Srun implements \srun\base\Product
      * @param $product_id_form
      * @param $product_id_to
      * @param $change_at
-     * @return mixed
+     * @return object|string
      */
     public function reservationTransfer($user_name, $product_id_form, $product_id_to, $change_at)
     {
-        // TODO: Implement reservationTransfer() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function cancelReservationTransfer($user_name, $product_id)
     {
-        // TODO: Implement cancelReservationTransfer() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function cancel($user_name, $product_id)
     {
-        // TODO: Implement cancel() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function disable($user_name, $product_id)
     {
-        // TODO: Implement disable() method.
+        return $this->req('');
     }
 
     /**
      * @param $user_name
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function enable($user_name, $product_id)
     {
-        // TODO: Implement enable() method.
+        return $this->req('');
     }
 
     /**
@@ -197,11 +197,11 @@ class Product extends Srun implements \srun\base\Product
      * @param $mobile_password
      * @param $action
      * @param $is_use
-     * @return mixed
+     * @return object|string
      */
     public function checkOperator($mobile_phone, $mobile_password, $action, $is_use = null)
     {
-        // TODO: Implement checkOperator() method.
+        return $this->req('');
     }
 
     /**
@@ -211,11 +211,11 @@ class Product extends Srun implements \srun\base\Product
      * @param $mobile_password
      * @param $user_available
      * @param $action
-     * @return mixed
+     * @return object|string
      */
     public function operator($user_name, $product_id, $mobile_phone = null, $mobile_password = null, $user_available = null, $action = null)
     {
-        // TODO: Implement operator() method.
+        return $this->req('');
     }
 
     /**
@@ -224,11 +224,11 @@ class Product extends Srun implements \srun\base\Product
      * @param $stop_at
      * @param $per_page
      * @param $page
-     * @return mixed
+     * @return object|string
      */
     public function expire($product_id, $start_at = null, $stop_at = null, $per_page = null, $page = null)
     {
-        // TODO: Implement expire() method.
+        return $this->req('');
     }
 
     /**
@@ -236,10 +236,10 @@ class Product extends Srun implements \srun\base\Product
      * @param $operate_type
      * @param $monthly_fee
      * @param $product_id
-     * @return mixed
+     * @return object|string
      */
     public function refund($user_name, $operate_type, $monthly_fee = null, $product_id = null)
     {
-        // TODO: Implement refund() method.
+        return $this->req('');
     }
 }

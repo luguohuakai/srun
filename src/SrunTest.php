@@ -14,11 +14,21 @@ function initUser(): User
     return new User($ini['srun_north_api_url']);
 }
 
-$res = initUser()->balance('srun');
+$res = initUser()->view('srun');
 Func::dd($res);
 
 // 也可以直接调用
 $ini = parse_ini_file('./srun.ini');
 $user = new User($ini['srun_north_api_url']);
-$res = $user->balance('srun');
+$res = $user->view('srun');
 Func::dd($res);
+
+(new Alipay(''))->req('');
+(new Auth(''))->req('');
+(new Financial(''))->req('');
+(new Group(''))->req('');
+(new Message(''))->req('');
+(new Package(''))->req('');
+(new Product(''))->req('');
+(new Setting(''))->req('');
+(new Strategy(''))->req('');
