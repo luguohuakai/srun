@@ -12,18 +12,172 @@ class Financial extends Srun implements \srun\base\Financial
     /**
      * 电子钱包充值接口
      * @param $user_name
-     * @param $amount
-     * @param $order_no
+     * @param int $pay_type_id
+     * @param array $other
      * @return object|string
      */
-    public function rechargeWallet($user_name, $amount, $order_no)
+    public function rechargeWallet($user_name, $pay_type_id = 1, $other = [])
     {
         $data = [
             'user_name' => $user_name,
-            'pay_type_id' => 1,
-            'pay_num' => $amount,
-            'order_no' => $order_no,
+            'pay_type_id' => $pay_type_id,
         ];
+        $data = array_merge($data, $other);
         return $this->req('api/v1/financial/recharge-wallet', $data, 'post');
+    }
+
+    /**
+     * @param $user_name
+     * @param $order_no
+     * @param $start_at
+     * @param $stop_at
+     * @param $pay_type_id
+     * @return mixed
+     */
+    public function paymentRecord($user_name, $order_no = null, $start_at = null, $stop_at = null, $pay_type_id = null)
+    {
+        // TODO: Implement paymentRecord() method.
+    }
+
+    /**
+     * @param $user_name
+     * @param $refund_num
+     * @param $product_id
+     * @param $mgr_name
+     * @param $start_at
+     * @param $stop_at
+     * @return mixed
+     */
+    public function refund($user_name, $refund_num = null, $product_id = null, $mgr_name = null, $start_at = null, $stop_at = null)
+    {
+        // TODO: Implement refund() method.
+    }
+
+    /**
+     * @param $user_name
+     * @param $start_at
+     * @param $stop_at
+     * @return mixed
+     */
+    public function checkoutListDetail($user_name, $start_at = null, $stop_at = null)
+    {
+        // TODO: Implement checkoutListDetail() method.
+    }
+
+    /**
+     * @param $user_name
+     * @param $amount
+     * @param $transfer_account
+     * @return mixed
+     */
+    public function transfer($user_name, $amount, $transfer_account)
+    {
+        // TODO: Implement transfer() method.
+    }
+
+    /**
+     * 返回电子钱包余额接口
+     * @param $user_name
+     * @return object|string
+     */
+    public function userBalance($user_name)
+    {
+        return $this->req('api/v1/user/balance', ['user_name' => $user_name]);
+    }
+
+    /**
+     * @param $ka_card_num
+     * @param $ka_passwd
+     * @return mixed
+     */
+    public function rechargeCard($ka_card_num, $ka_passwd)
+    {
+        // TODO: Implement rechargeCard() method.
+    }
+
+    /**
+     * @param $extra_pay_id
+     * @param array $other
+     * @return mixed
+     */
+    public function extraPay($extra_pay_id, array $other = [])
+    {
+        // TODO: Implement extraPay() method.
+    }
+
+    /**
+     * @param $user_name
+     * @param $trade_no
+     * @param $money
+     * @param $buy_time
+     * @param $pay_type
+     * @param $remark
+     * @return mixed
+     */
+    public function paymentDataSync($user_name, $trade_no, $money, $buy_time, $pay_type, $remark = null)
+    {
+        // TODO: Implement paymentDataSync() method.
+    }
+
+    /**
+     * @param $pay_type_id
+     * @param $start_time
+     * @param $stop_time
+     * @return mixed
+     */
+    public function paymentOverview($pay_type_id, $start_time = null, $stop_time = null)
+    {
+        // TODO: Implement paymentOverview() method.
+    }
+
+    /**
+     * @return mixed
+     */
+    public function payType()
+    {
+        // TODO: Implement payType() method.
+    }
+
+    /**
+     * @param $type_name
+     * @param $default
+     * @param $is_balance
+     * @return mixed
+     */
+    public function createPayment($type_name, $default = null, $is_balance = null)
+    {
+        // TODO: Implement createPayment() method.
+    }
+
+    /**
+     * @param $pay_type_id
+     * @param $type_name
+     * @param $default
+     * @param $is_balance
+     * @return mixed
+     */
+    public function updatePayment($pay_type_id, $type_name = null, $default = null, $is_balance = null)
+    {
+        // TODO: Implement updatePayment() method.
+    }
+
+    /**
+     * @param $pay_type_id
+     * @return mixed
+     */
+    public function deletePayment($pay_type_id)
+    {
+        // TODO: Implement deletePayment() method.
+    }
+
+    /**
+     * @param $user_name
+     * @param $start_at
+     * @param $stop_at
+     * @return mixed
+     */
+    public function packageRechargeRecord($user_name, $start_at = null, $stop_at = null)
+    {
+        // TODO: Implement packageRechargeRecord() method.
     }
 }

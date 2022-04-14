@@ -10,10 +10,31 @@ class Group extends Srun implements \srun\base\Group
     }
 
     // (北向接口)添加用户组
-    public function group($group_name, $parent_name = '/')
+    public function add($group_name, $parent_name = '/')
     {
         $data['name'] = mb_substr($group_name, 0, 100);
         $data['parent_name'] = $parent_name;
         return $this->req('api/v1/groups', $data, 'post');
+    }
+
+    /**
+     * @param $name
+     * @param $id
+     * @param $per_page
+     * @param $page
+     * @return mixed
+     */
+    public function view($name = null, $id = null, $per_page = null, $page = null)
+    {
+        // TODO: Implement view() method.
+    }
+
+    /**
+     * @param $group_id
+     * @return mixed
+     */
+    public function Subscribe($group_id)
+    {
+        // TODO: Implement Subscribe() method.
     }
 }

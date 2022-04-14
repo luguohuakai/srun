@@ -14,11 +14,11 @@ function initUser(): User
     return new User($ini['srun_north_api_url']);
 }
 
-$res = initUser()->userBalance('srun');
+$res = initUser()->balance('srun');
 Func::dd($res);
 
 // 也可以直接调用
 $ini = parse_ini_file('./srun.ini');
 $user = new User($ini['srun_north_api_url']);
-$res = $user->userBalance('srun');
+$res = $user->balance('srun');
 Func::dd($res);
