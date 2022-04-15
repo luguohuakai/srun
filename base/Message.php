@@ -12,7 +12,7 @@ interface Message
 
     public function keyEvent($user_name, $key_name);
 
-    public function keyThird($eventSource, $eventType, $variable);
+    public function keyThird($event_source, $event_type, $variable);
 
     public function keyView($key_name);
 }

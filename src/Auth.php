@@ -10,18 +10,20 @@ class Auth extends Srun implements \srun\base\Auth
     }
 
     /**
+     * 获取令牌接口
      * @return object|string
      */
     public function getAccessToken()
     {
-        return $this->req('');
+        return $this->req('api/v1/auth/get-access-token');
     }
 
     /**
+     * 查看接口程序版本号接口
      * @return object|string
      */
     public function getVersion()
     {
-        return $this->req('');
+        return $this->req('api/v1/auth/get-version');
     }
 }

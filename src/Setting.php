@@ -15,6 +15,6 @@ class Setting extends Srun implements \srun\base\Setting
      */
     public function settingLanguage($language)
     {
-        return $this->req('');
+        return $this->req('api/v1/setting/language', compact('language'));
     }
 }

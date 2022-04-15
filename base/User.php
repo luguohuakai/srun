@@ -20,7 +20,7 @@ interface User
 
     public function search($value, int $type = 1);
 
-    public function superSearch($user_name = null, $user_real_name = null, $cert_num = null, $address = null, $phone = null, $email = null, $per_page = null, $page = null);
+    public function superSearch($param = []);
 
     public function detail($user_name = null, $add_time = null, $user_ip = null, $per_page = null, $page = null);
 
@@ -57,6 +57,8 @@ interface User
     public function resetPasswordManager($username, $password, $new_password);
 
     public function auth($domain, $auth_type, $type);
+
+    public function authAsync($user_ip, $user_mac, $os_name, $nas_ip, $auth_type);
 
     public function maxOnlineNum($user_name, $num);
 

@@ -18,6 +18,7 @@ class Group extends Srun implements \srun\base\Group
     }
 
     /**
+     * 查询用户组接口
      * @param $name
      * @param $id
      * @param $per_page
@@ -26,15 +27,21 @@ class Group extends Srun implements \srun\base\Group
      */
     public function view($name = null, $id = null, $per_page = null, $page = null)
     {
-        return $this->req('');
+        $data = [];
+        if ($name !== null) $data['name'] = $name;
+        if ($id !== null) $data['id'] = $id;
+        if ($per_page !== null) $data['per-page'] = $per_page;
+        if ($page !== null) $data['page'] = $page;
+        return $this->req('api/v1/groups', $data);
     }
 
     /**
+     * 查询用户组可订购的产品接口
      * @param $group_id
      * @return object|string
      */
     public function Subscribe($group_id)
     {
-        return $this->req('');
+        return $this->req('api/v1/group/subscribe', compact('group_id'));
     }
 }

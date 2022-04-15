@@ -10,6 +10,7 @@ class Strategy extends Srun implements \srun\base\Strategy
     }
 
     /**
+     * 添加计费策略
      * @param $billing_name
      * @param $billing_num
      * @param $billing_unit
@@ -19,16 +20,19 @@ class Strategy extends Srun implements \srun\base\Strategy
      */
     public function billingCreate($billing_name, $billing_num, $billing_unit, $billing_rate, array $other = [])
     {
-        return $this->req('');
+        $data = compact('billing_name', 'billing_num', 'billing_unit', 'billing_rate');
+        if (!empty($other)) $data = array_merge($data, $other);
+        return $this->req('api/v1/strategy/billing-create', $data, 'post');
     }
 
     /**
+     * 添加控制策略
      * @param $control_name
      * @param array $other
      * @return object|string
      */
     public function controlCreate($control_name, array $other = [])
     {
-        return $this->req('');
+        return $this->req('api/v1/strategy/control-create', array_merge(compact('control_name'), $other), 'post');
     }
 }

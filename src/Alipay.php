@@ -10,6 +10,7 @@ class Alipay extends Srun implements \srun\base\Alipay
     }
 
     /**
+     * step1. 获取支付宝跳转窗口的表单提交代码
      * @param $out_trade_no
      * @param $order_name
      * @param $desc
@@ -20,10 +21,11 @@ class Alipay extends Srun implements \srun\base\Alipay
      */
     public function pay($out_trade_no, $order_name, $desc, $money, $notify_type, $return_url)
     {
-        return $this->req('');
+        return $this->req('api/v1/alipay/pay', compact('out_trade_no', 'order_name', 'desc', 'money', 'notify_type', 'return_url'), 'post');
     }
 
     /**
+     * step2. 将支付结果写入支付日志
      * @param $user_name
      * @param $out_trade_no
      * @param $money
@@ -35,6 +37,10 @@ class Alipay extends Srun implements \srun\base\Alipay
      */
     public function writeLog($user_name, $out_trade_no, $money, $status, $payment = null, $trade_no = null, $remark = null)
     {
-        return $this->req('');
+        $data = compact('user_name', 'out_trade_no', 'money', 'status');
+        if ($payment !== null) $data['payment'] = $payment;
+        if ($trade_no !== null) $data['trade_no'] = $trade_no;
+        if ($remark !== null) $data['remark'] = $remark;
+        return $this->req('api/v1/alipay/write-log', $data, 'post');
     }
 }

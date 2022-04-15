@@ -8,7 +8,7 @@ interface Product
 
     public function delete($product_id);
 
-    public function update($product_id, $product_name, $billing_id, $control_id, $binding_mode, $checkout_mode, $condition);
+    public function update($param);
 
     public function canSubscribe($user_name);
 
