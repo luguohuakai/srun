@@ -29,7 +29,12 @@
     "ext-iconv": "*",
     "ext-mbstring": "*",
     "ext-redis": "*",
-    "luguohuakai/func": "~1.0.1"
+    "luguohuakai/func": "~1.0.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "srun\\": ""
+    }
   },
   "config": {
     "process-timeout": 1800
