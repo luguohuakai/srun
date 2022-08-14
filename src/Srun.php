@@ -6,17 +6,28 @@ use func\src\Func;
 
 class Srun implements \srun\base\Srun
 {
-    private $srun_north_api_url;
+    private $srun_north_api_url = 'https://127.0.0.1:8001/';
     private $srun_north_access_token = '';
     private $srun_north_access_token_expire = 7200;
     private $srun_north_access_token_redis_key = 'srun_north_access_token_redis';
+    private $rds_config = [
+        'index' => 0,
+        'port' => 6379,
+        'host' => '127.0.0.1',
+        'pass' => null,
+    ];
 
-    public function __construct($srun_north_api_url, $srun_north_access_token = null, $srun_north_access_token_expire = null, $srun_north_access_token_redis_key = null)
+    public function __construct($srun_north_api_url = null, $srun_north_access_token = null, $srun_north_access_token_expire = null, $srun_north_access_token_redis_key = null)
     {
-        $this->srun_north_api_url = $srun_north_api_url;
+        if (!$srun_north_api_url) $this->srun_north_api_url = $srun_north_api_url;
         if (!$srun_north_access_token) $this->srun_north_access_token = $srun_north_access_token;
         if (!$srun_north_access_token_expire) $this->srun_north_access_token_expire = $srun_north_access_token_expire;
         if (!$srun_north_access_token_redis_key) $this->srun_north_access_token_redis_key = $srun_north_access_token_redis_key;
+    }
+
+    public function setRdsConfig($rds_config)
+    {
+        $this->rds_config = array_merge($this->rds_config, $rds_config);
     }
 
     /**
@@ -89,12 +100,12 @@ class Srun implements \srun\base\Srun
     public function accessToken()
     {
         if ($this->srun_north_access_token) return $this->srun_north_access_token;
-        $access_token = Func::Rds()->get($this->srun_north_access_token_redis_key);
+        $access_token = Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->get($this->srun_north_access_token_redis_key);
         if ($access_token) return $access_token;
         $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
         if (isset($rs->data) && isset($rs->data->access_token)) {
             // 缓存令牌
-            Func::Rds()->setex($this->srun_north_access_token_redis_key, $this->srun_north_access_token_expire, $rs->data->access_token);
+            Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->setex($this->srun_north_access_token_redis_key, $this->srun_north_access_token_expire, $rs->data->access_token);
             return $rs->data->access_token;
         } else {
             return false;
