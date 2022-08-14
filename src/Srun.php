@@ -19,10 +19,10 @@ class Srun implements \srun\base\Srun
 
     public function __construct($srun_north_api_url = null, $srun_north_access_token = null, $srun_north_access_token_expire = null, $srun_north_access_token_redis_key = null)
     {
-        if (!$srun_north_api_url) $this->srun_north_api_url = $srun_north_api_url;
-        if (!$srun_north_access_token) $this->srun_north_access_token = $srun_north_access_token;
-        if (!$srun_north_access_token_expire) $this->srun_north_access_token_expire = $srun_north_access_token_expire;
-        if (!$srun_north_access_token_redis_key) $this->srun_north_access_token_redis_key = $srun_north_access_token_redis_key;
+        if ($srun_north_api_url) $this->srun_north_api_url = $srun_north_api_url;
+        if ($srun_north_access_token) $this->srun_north_access_token = $srun_north_access_token;
+        if ($srun_north_access_token_expire) $this->srun_north_access_token_expire = $srun_north_access_token_expire;
+        if ($srun_north_access_token_redis_key) $this->srun_north_access_token_redis_key = $srun_north_access_token_redis_key;
     }
 
     public function setRdsConfig($rds_config)
