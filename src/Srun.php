@@ -213,8 +213,10 @@ class Srun implements \srun\base\Srun
     }
 
 
-    public $sso_secret;
-    public $sso_auth_url;
+    // 8082上的微信临时放行key(必须核实)也可在服务器文件srun4kauth.xml中ApiAuthSecret字段获得需修改EnableAPIAuth=1然后重启srun3kauth
+    // 重启 srun3kauth 程序: /srun3/bin/srun3kauth-ctrl.sh restart
+    public $sso_secret = '123456';
+    public $sso_auth_url = 'http://127.0.0.1/';
 
     /**
      * 单点认证 发起认证请求/下线
