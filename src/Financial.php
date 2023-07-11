@@ -29,6 +29,8 @@ class Financial extends Srun implements \srun\base\Financial
     /**
      * 缴费记录接口
      * @param $user_name
+     * @param null $page
+     * @param null $size
      * @param $order_no
      * @param $start_at
      * @param $stop_at
