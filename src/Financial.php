@@ -35,9 +35,11 @@ class Financial extends Srun implements \srun\base\Financial
      * @param $pay_type_id
      * @return object|string
      */
-    public function paymentRecord($user_name, $order_no = null, $start_at = null, $stop_at = null, $pay_type_id = null)
+    public function paymentRecord($user_name, $page = null, $size = null, $order_no = null, $start_at = null, $stop_at = null, $pay_type_id = null)
     {
         $data = compact('user_name');
+        if ($page !== null) $data['page'] = $page;
+        if ($size !== null) $data['per-page'] = $size;
         if ($order_no !== null) $data['order_no'] = $order_no;
         if ($start_at !== null) $data['start_at'] = $start_at;
         if ($stop_at !== null) $data['stop_at'] = $stop_at;

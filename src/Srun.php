@@ -251,9 +251,11 @@ class Srun implements \srun\base\Srun
         }
         // 注意: 需要先在params.php配置
         $rs = $this->postSso($this->sso_auth_url . 'cgi-bin/srun_portal', $data);
+        $res = $rs;
         if (!$rs) return Func::fail($data, '请求失败');
         if (isset($rs->_err)) return Func::fail($data, $rs->_err);
         $rs = is_object($rs) ? $rs : json_decode($rs);
+        if (!is_object($rs)) return Func::fail($res);
         // 判断成功还是失败
         $auth_msg = $this->getAuthMsg($rs);
         if (isset($auth_msg['success'])) {
@@ -282,7 +284,7 @@ class Srun implements \srun\base\Srun
         $rs = is_object($rs) ? $rs : json_decode($rs);
         $rs = is_object($rs) ? $rs : json_decode($rs);
         if (!is_object($rs)) {
-            $msg = 'json解析失败';
+            $msg = 'json解析失败:' . json_encode($rs, JSON_UNESCAPED_UNICODE);
             goto end;
         }
         if (isset($rs->ecode) && $rs->ecode) {

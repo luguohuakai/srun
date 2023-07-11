@@ -4,7 +4,7 @@ namespace srun\base;
 
 interface Financial
 {
-    public function paymentRecord($user_name, $order_no = null, $start_at = null, $stop_at = null, $pay_type_id = null);
+    public function paymentRecord($user_name, $page = null, $size = null, $order_no = null, $start_at = null, $stop_at = null, $pay_type_id = null);
 
     public function refund($user_name, $refund_num = null, $product_id = null, $mgr_name = null, $start_at = null, $stop_at = null);
 
