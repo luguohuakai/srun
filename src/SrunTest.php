@@ -2,7 +2,7 @@
 
 namespace srun\src;
 
-use func\src\Func;
+use luguohuakai\func\Func;
 
 require_once '../base/Srun.php';
 require_once 'Srun.php';

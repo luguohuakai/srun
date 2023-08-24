@@ -2,7 +2,7 @@
 
 namespace srun\src;
 
-use func\src\Func;
+use luguohuakai\func\Func;
 
 class Srun implements \srun\base\Srun
 {
@@ -23,6 +23,15 @@ class Srun implements \srun\base\Srun
         if ($srun_north_access_token) $this->srun_north_access_token = $srun_north_access_token;
         if ($srun_north_access_token_expire) $this->srun_north_access_token_expire = $srun_north_access_token_expire;
         if ($srun_north_access_token_redis_key) $this->srun_north_access_token_redis_key = $srun_north_access_token_redis_key;
+
+        // 自动判断当前环境是否为srun4k
+        $system_conf_file = '/srun3/etc/system.conf';
+        if (is_file($system_conf_file)) {
+            $system_conf = parse_ini_file($system_conf_file);
+            $this->rds_config['port'] = 16382;
+            $this->rds_config['host'] = $system_conf['user_server'];
+            $this->rds_config['pass'] = $system_conf['redis_password'];
+        }
     }
 
     public function setRdsConfig($rds_config)
