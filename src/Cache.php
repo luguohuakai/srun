@@ -11,10 +11,10 @@ class Cache
     const CACHE_REDIS = 2;
     // 当处于srun4k环境时使用redis缓存, 可手动设置为file缓存
     // 当不是srun4k环境时默认使用文件缓存, 可手动设置为redis缓存
-    private $cache_type = self::CACHE_FILE;
+    private $cache_type;
     private $in_srun4k = false;
 
-    private $cache_file = './.srun_cache';
+    private $cache_file = './srun_cache';
 
     private $rds_config = [
         'index' => 0,
@@ -24,7 +24,7 @@ class Cache
     ];
 
     // 缓存是否加密
-    private $encrypt = false;
+    private $encrypt;
 
     /**
      * 目前支持 文件缓存 redis缓存
@@ -71,13 +71,28 @@ class Cache
         }
     }
 
-    public function set($key, $value, $ttl = 0): bool
+    /**
+     * @param $key
+     * @param $value
+     * @param int $ttl 过期时间, 单位:秒, 0:永不过期
+     * @return bool
+     */
+    public function set($key, $value, int $ttl = 0): bool
     {
         if ($this->encrypt) $value = Func::ED($value);
+        $expired_at = $ttl > 0 ? time() + $ttl : 0;
         switch ($this->cache_type) {
-            // todo:
             case self::CACHE_FILE:
-                break;
+                $arr = [];
+                $str = file_get_contents($this->cache_file);
+                if ($str) {
+                    $_arr = json_decode($str, true);
+                    if ($_arr && is_array($_arr)) {
+                        $arr = $_arr;
+                    }
+                }
+                $rs = file_put_contents($this->cache_file, json_encode(array_merge($arr, [$key => compact('value', 'expired_at')])));
+                return (bool)$rs;
             case self::CACHE_REDIS:
                 if ($ttl > 0) {
                     return Func::Rds(...$this->rds_config)->setEx($key, $ttl, $value);
@@ -88,17 +103,33 @@ class Cache
         return false;
     }
 
+    /**
+     * @param $key
+     * @return array|false|mixed|string|string[]|null
+     */
     public function get($key)
     {
         switch ($this->cache_type) {
-            // todo:
             case self::CACHE_FILE:
-                break;
+                $str = file_get_contents($this->cache_file);
+                if ($str) {
+                    $_arr = json_decode($str, true);
+                    if ($_arr && is_array($_arr)) {
+                        if (isset($_arr[$key]) && ($_arr[$key]['expired_at'] > time() || $_arr[$key]['expired_at'] == 0)) {
+                            return $this->encrypt ? Func::ED($_arr[$key]['value'], 'D') : $_arr[$key]['value'];
+                        }
+                        if (isset($_arr[$key]) && $_arr[$key]['expired_at'] <= time() && $_arr[$key]['expired_at'] != 0) {
+                            unset($_arr[$key]);
+                            file_put_contents($this->cache_file, json_encode($_arr));
+                        }
+                    }
+                }
+                return null;
             case self::CACHE_REDIS:
                 $rs = Func::Rds(...$this->rds_config)->get($key);
-                if ($this->encrypt) return Func::ED($rs, 'D');
-                return $rs;
+                if ($rs !== false) return $this->encrypt ? Func::ED($rs, 'D') : $rs;
+                return null;
         }
-        return false;
+        return null;
     }
 }
