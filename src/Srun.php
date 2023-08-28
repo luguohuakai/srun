@@ -10,6 +10,7 @@ class Srun implements \srun\base\Srun
     private $srun_north_access_token = '';
     private $srun_north_access_token_expire = 7200;
     private $srun_north_access_token_redis_key = 'srun_north_access_token_redis';
+    private $use_this_rds = false;
     private $rds_config = [
         'index' => 0,
         'port' => 6379,
@@ -27,6 +28,7 @@ class Srun implements \srun\base\Srun
         // 自动判断当前环境是否为srun4k
         $system_conf_file = '/srun3/etc/system.conf';
         if (is_file($system_conf_file)) {
+            $this->use_this_rds = true;
             $system_conf = parse_ini_file($system_conf_file);
             $this->rds_config['port'] = 16382;
             $this->rds_config['host'] = $system_conf['user_server'];
@@ -36,6 +38,7 @@ class Srun implements \srun\base\Srun
 
     public function setRdsConfig($rds_config)
     {
+        $this->use_this_rds = true;
         $this->rds_config = array_merge($this->rds_config, $rds_config);
     }
 
@@ -109,15 +112,30 @@ class Srun implements \srun\base\Srun
     public function accessToken()
     {
         if ($this->srun_north_access_token) return $this->srun_north_access_token;
-        $access_token = Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->get($this->srun_north_access_token_redis_key);
-        if ($access_token) return $access_token;
-        $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
-        if (isset($rs->data) && isset($rs->data->access_token)) {
-            // 缓存令牌
-            Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->setex($this->srun_north_access_token_redis_key, $this->srun_north_access_token_expire, $rs->data->access_token);
-            return $rs->data->access_token;
+
+        if ($this->use_this_rds) {
+            $access_token = Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->get($this->srun_north_access_token_redis_key);
+            if ($access_token) return $access_token;
+            $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
+            if (isset($rs->data) && isset($rs->data->access_token)) {
+                // 缓存令牌
+                Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->setex($this->srun_north_access_token_redis_key, $this->srun_north_access_token_expire, $rs->data->access_token);
+                return $rs->data->access_token;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            $cache = new Cache;
+            $access_token = $cache->get($this->srun_north_access_token_redis_key);
+            if ($access_token) return $access_token;
+            $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
+            if (isset($rs->data) && isset($rs->data->access_token)) {
+                // 缓存令牌
+                $cache->set($this->srun_north_access_token_redis_key, $rs->data->access_token, $this->srun_north_access_token_expire);
+                return $rs->data->access_token;
+            } else {
+                return false;
+            }
         }
     }
 
