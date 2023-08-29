@@ -11,6 +11,7 @@ class Srun implements \srun\base\Srun
     private $srun_north_access_token_expire = 7200;
     private $srun_north_access_token_redis_key = 'srun_north_access_token_redis';
     private $use_this_rds = false;
+    private $default_log_path = '/var/log/srun/';
     private $rds_config = [
         'index' => 0,
         'port' => 6379,
@@ -33,9 +34,19 @@ class Srun implements \srun\base\Srun
             $this->rds_config['port'] = 16382;
             $this->rds_config['host'] = $system_conf['user_server'];
             $this->rds_config['pass'] = $system_conf['redis_password'];
+
+            $this->default_log_path = '/srun3/log/srun/';
         }
+
+        if (!is_dir($this->default_log_path)) mkdir($this->default_log_path, 0777, true);
     }
 
+    /**
+     * 自定义redis缓存配置
+     * @param $rds_config
+     * @return void
+     * @deprecated since 1.0.8
+     */
     public function setRdsConfig($rds_config)
     {
         $this->use_this_rds = true;
@@ -43,6 +54,7 @@ class Srun implements \srun\base\Srun
     }
 
     /**
+     * 发起curl请求
      * @param $path
      * @param array $data
      * @param string $method
@@ -54,32 +66,89 @@ class Srun implements \srun\base\Srun
     {
         $method = strtolower($method);
         $srun_north_api_url = $this->srun_north_api_url;
-        if (!$srun_north_api_url) return 'NORTH INTERFACE ERR';
+        if (!$srun_north_api_url) {
+            $this->logError('NORTH INTERFACE ERR');
+            return 'NORTH INTERFACE ERR';
+        }
         $url = "$srun_north_api_url$path";
 
         if ($access_token === true) {
             $srun_north_access_token = $this->accessToken();
-            if (!$srun_north_access_token) return 'NORTH INTERFACE ACCESS_TOKEN ERR';
+            if (!$srun_north_access_token) {
+                $this->logError('NORTH INTERFACE ACCESS_TOKEN ERR');
+                return 'NORTH INTERFACE ACCESS_TOKEN ERR';
+            }
             if ($method === 'get') $url = "$url?access_token=$srun_north_access_token";
             if ($method === 'post') $data['access_token'] = $srun_north_access_token;
             if ($method === 'delete') $data['access_token'] = $srun_north_access_token;
         }
 
+        $this->logInfo("$method|$url|" . json_encode($data, JSON_UNESCAPED_UNICODE), 'request');
         $rs = Func::$method($url, $data, $header);
 
-        if (!$rs) return 'NORTH INTERFACE REQUEST ERR';
-        if (is_object($rs) && isset($rs->_err)) return (string)$rs->_err;
+        if (!$rs) {
+            $this->logError('NORTH INTERFACE REQUEST ERR');
+            return 'NORTH INTERFACE REQUEST ERR';
+        }
+        if (is_object($rs) && isset($rs->_err)) {
+            $this->logError('Curl error: ' . $rs->_err);
+            return (string)$rs->_err;
+        }
         $json = is_object($rs) ? $rs : json_decode($rs);
         $json = is_object($json) ? $json : json_decode($json);
-        if (!is_object($json)) return 'RESULT DECODE ERR';
-        if (isset($json->code) && $json->code == 0) return $json;
+        if (!is_object($json)) {
+            $this->logError('RESULT DECODE ERR');
+            return 'RESULT DECODE ERR';
+        }
+        if (isset($json->code) && $json->code == 0) {
+            $this->logInfo("$method|$url|" . json_encode($json, JSON_UNESCAPED_UNICODE), 'response');
+            return $json;
+        }
         if (isset($json->code)) {
             $err_code = (int)$json->code;
             $err_msg = $json->message;
             if (in_array($err_code, array_keys(SrunError::$north))) $err_msg .= '-' . SrunError::$north[$err_code];
+            $this->logError('NORTH ERR - ' . $err_msg);
             return 'NORTH ERR - ' . $err_msg;
         }
+        $this->logError('NORTH INTERFACE UNKNOWN ERR');
         return 'NORTH INTERFACE UNKNOWN ERR';
+    }
+
+    /**
+     * 获取北向接口令牌
+     * @return mixed|bool|string
+     */
+    public function accessToken()
+    {
+        if ($this->srun_north_access_token) return $this->srun_north_access_token;
+
+        if ($this->use_this_rds) {
+            $access_token = Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->get($this->srun_north_access_token_redis_key);
+            if ($access_token) return $access_token;
+            $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
+            if (isset($rs->data) && isset($rs->data->access_token)) {
+                // 缓存令牌
+                Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->setex($this->srun_north_access_token_redis_key, $this->srun_north_access_token_expire, $rs->data->access_token);
+                return $rs->data->access_token;
+            } else {
+                $this->logError('get access_token failed1', __METHOD__);
+                return false;
+            }
+        } else {
+            $cache = new Cache;
+            $access_token = $cache->get($this->srun_north_access_token_redis_key);
+            if ($access_token) return $access_token;
+            $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
+            if (isset($rs->data) && isset($rs->data->access_token)) {
+                // 缓存令牌
+                $cache->set($this->srun_north_access_token_redis_key, $rs->data->access_token, $this->srun_north_access_token_expire);
+                return $rs->data->access_token;
+            } else {
+                $this->logError('get access_token failed2', __METHOD__);
+                return false;
+            }
+        }
     }
 
     /**
@@ -105,39 +174,11 @@ class Srun implements \srun\base\Srun
         return is_object($rs) && $rs->code === 0;
     }
 
-    /**
-     * 获取北向接口令牌
-     * @return mixed|bool|string
-     */
-    public function accessToken()
-    {
-        if ($this->srun_north_access_token) return $this->srun_north_access_token;
 
-        if ($this->use_this_rds) {
-            $access_token = Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->get($this->srun_north_access_token_redis_key);
-            if ($access_token) return $access_token;
-            $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
-            if (isset($rs->data) && isset($rs->data->access_token)) {
-                // 缓存令牌
-                Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->setex($this->srun_north_access_token_redis_key, $this->srun_north_access_token_expire, $rs->data->access_token);
-                return $rs->data->access_token;
-            } else {
-                return false;
-            }
-        } else {
-            $cache = new Cache;
-            $access_token = $cache->get($this->srun_north_access_token_redis_key);
-            if ($access_token) return $access_token;
-            $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);
-            if (isset($rs->data) && isset($rs->data->access_token)) {
-                // 缓存令牌
-                $cache->set($this->srun_north_access_token_redis_key, $rs->data->access_token, $this->srun_north_access_token_expire);
-                return $rs->data->access_token;
-            } else {
-                return false;
-            }
-        }
-    }
+    // 8082上的微信临时放行key(必须核实)也可在服务器文件srun4kauth.xml中ApiAuthSecret字段获得需修改EnableAPIAuth=1然后重启srun3kauth
+    // 重启 srun3kauth 程序: /srun3/bin/srun3kauth-ctrl.sh restart
+    public $sso_secret = '123456';
+    public $sso_auth_url = 'http://127.0.0.1/';
 
     /**
      * 单点登录请求方法
@@ -145,7 +186,7 @@ class Srun implements \srun\base\Srun
      * @param $post_data
      * @return mixed
      */
-    function postSso($url, $post_data)
+    public function postSso($url, $post_data)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // https请求 不验证证书和hosts
@@ -174,7 +215,15 @@ class Srun implements \srun\base\Srun
         return $output;
     }
 
-    // 单点认证 上线
+    /**
+     * 单点认证 上线
+     * @param $auth_addr
+     * @param $secret
+     * @param $user_name
+     * @param $ip
+     * @param $ac_id
+     * @return string
+     */
     public function ssoLogin($auth_addr, $secret, $user_name, $ip, $ac_id = null): string
     {
         $time = time();
@@ -198,7 +247,7 @@ class Srun implements \srun\base\Srun
             // 判断成功还是失败
             $auth_msg = $this->getAuthMsg($json);
             if (isset($auth_msg['success'])) {
-                $this->keyHandleLog('认证成功,异步通知成功');
+                $this->ssoLog('认证成功,异步通知成功');
                 return Func::success($json);
             }
             if (isset($auth_msg['fail'])) return Func::fail($json, $auth_msg['fail']);
@@ -208,7 +257,15 @@ class Srun implements \srun\base\Srun
         }
     }
 
-    // 单点认证 下线
+    /**
+     * 单点认证 下线
+     * @param $auth_addr
+     * @param $secret
+     * @param $user_name
+     * @param $ip
+     * @param $ac_id
+     * @return string
+     */
     public function ssoDrop($auth_addr, $secret, $user_name, $ip, $ac_id = null): string
     {
         $time = time();
@@ -229,7 +286,7 @@ class Srun implements \srun\base\Srun
             // 判断成功还是失败
             $auth_msg = $this->getAuthMsg($json);
             if (isset($auth_msg['success'])) {
-                $this->keyHandleLog('退出成功');
+                $this->ssoLog('退出成功');
                 return Func::success($json);
             }
             if (isset($auth_msg['fail'])) return Func::fail($json, $auth_msg['fail']);
@@ -238,12 +295,6 @@ class Srun implements \srun\base\Srun
             return Func::fail($json, '请求失败');
         }
     }
-
-
-    // 8082上的微信临时放行key(必须核实)也可在服务器文件srun4kauth.xml中ApiAuthSecret字段获得需修改EnableAPIAuth=1然后重启srun3kauth
-    // 重启 srun3kauth 程序: /srun3/bin/srun3kauth-ctrl.sh restart
-    public $sso_secret = '123456';
-    public $sso_auth_url = 'http://127.0.0.1/';
 
     /**
      * 单点认证 发起认证请求/下线
@@ -286,7 +337,7 @@ class Srun implements \srun\base\Srun
         // 判断成功还是失败
         $auth_msg = $this->getAuthMsg($rs);
         if (isset($auth_msg['success'])) {
-            $this->keyHandleLog("drop={$drop}操作成功");
+            $this->ssoLog("drop={$drop}操作成功");
             return Func::success($rs);
         }
         if (isset($auth_msg['fail'])) return Func::fail($rs, $auth_msg['fail']);
@@ -434,16 +485,51 @@ class Srun implements \srun\base\Srun
     }
 
     /**
-     * 关键操作日志
-     * @param $msg
-     * @param bool $next 是否前置换行
-     * @param string $file 保存的文件路径及名称
+     * sso关键操作日志
+     * @param string|array|object $msg
+     * @param string $level info/error/warn...
+     * @return void
      */
-    public function keyHandleLog($msg, bool $next = false, string $file = '')
+    public function ssoLog($msg, string $level = 'info')
     {
-        if ($file === '') $file = '/temp/key_handle_ali_' . date('Y-m', time()) . '.log';
-        $log = Func::dt() . " $msg\r\n";
-        if ($next !== false) $log = "\r\n" . $log;
-        file_put_contents($file, $log, FILE_APPEND);
+        $this->srunLog($msg, $level, 'sso', 'sso');
+    }
+
+
+    /**
+     * 一般日志
+     * @param string|array|object $msg
+     * @param string $category app/sso/request/response...
+     * @return void
+     */
+    public function logInfo($msg, string $category = 'app')
+    {
+        $this->srunLog($msg, 'info', $category);
+    }
+
+    /**
+     * 错误日志
+     * @param string|array|object $msg
+     * @param string $category app/sso/request/response...
+     * @return void
+     */
+    public function logError($msg, string $category = 'app')
+    {
+        $this->srunLog($msg, 'error', $category);
+    }
+
+    /**
+     * 日志
+     * @param string|array|object $msg
+     * @param string $level info/error/warn...
+     * @param string $category app/sso/request/response...
+     * @return void
+     */
+    private function srunLog($msg, string $level = 'info', string $category = 'app', $type = 'srun')
+    {
+        if (is_array($msg) || is_object($msg)) $msg = json_encode($msg, JSON_UNESCAPED_UNICODE);
+        $msg = mb_substr($msg, 0, 1000);
+        $msg = date('Y-m-d H:i:s') . " [$level] [$category] $msg" . PHP_EOL;
+        file_put_contents($this->default_log_path . $type . date('Ym') . '.log', $msg, FILE_APPEND);
     }
 }

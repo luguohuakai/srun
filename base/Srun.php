@@ -22,5 +22,5 @@ interface Srun
 
     public function getAuthMsg($rs): array;
 
-    public function keyHandleLog($msg, bool $next = false, string $file = '');
+    public function ssoLog($msg);
 }
