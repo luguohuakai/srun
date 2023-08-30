@@ -11,6 +11,8 @@ class Srun implements \srun\base\Srun
     private $srun_north_access_token_expire = 7200;
     private $srun_north_access_token_redis_key = 'srun_north_access_token_redis';
     private $use_this_rds = false;
+    // 默认使用Cache类管理缓存
+    public $cache = true;
     private $default_log_path = '/var/log/srun/';
     private $rds_config = [
         'index' => 0,
@@ -51,6 +53,15 @@ class Srun implements \srun\base\Srun
     {
         $this->use_this_rds = true;
         $this->rds_config = array_merge($this->rds_config, $rds_config);
+    }
+
+    /**
+     * 关闭Cache类, 兼容老版本
+     * @return void
+     */
+    public function closeCache()
+    {
+        $this->cache = false;
     }
 
     /**
@@ -123,6 +134,9 @@ class Srun implements \srun\base\Srun
     {
         if ($this->srun_north_access_token) return $this->srun_north_access_token;
 
+        // 默认使用Cache类管理缓存
+        if ($this->cache) goto cache;
+
         if ($this->use_this_rds) {
             $access_token = Func::Rds($this->rds_config['index'], $this->rds_config['port'], $this->rds_config['host'], $this->rds_config['pass'])->get($this->srun_north_access_token_redis_key);
             if ($access_token) return $access_token;
@@ -136,6 +150,7 @@ class Srun implements \srun\base\Srun
                 return false;
             }
         } else {
+            cache:
             $cache = new Cache;
             $access_token = $cache->get($this->srun_north_access_token_redis_key);
             if ($access_token) return $access_token;
