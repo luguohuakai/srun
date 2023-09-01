@@ -7,19 +7,37 @@
 > SRUN SDK(北向接口/单点登录) 和常用工具类封装
 
 * 部分接口未实现的,或者需要扩展的,可以继承相应模块自行实现,也可以GitHub提交PR(欢迎PR)
+* 未实现接口或这里调用方式不能满足需求的也可自行根据北向接口文档进行调用
 * 日志: srun4k环境下默认位于: `/srun3/log/srun/`; 非srun4k环境: `/var/log/srun/`
 
 
 * 如果要使用SDK请到srun4k 8080中配置北向接口权限
 * 支持的接口 随北向接口更新
 
+### 当前支持的北向接口有
+
+```php
+new User(); // 用户相关
+new Alipay(); // 支付相关
+new Auth(); // 鉴权相关
+new Financial(); // 财务相关
+new Group(); // 用户组相关
+new Message(); // 消息相关
+new Package(); // 套餐相关
+new Product(); // 产品相关
+new Setting(); // 设置相关
+new Srun(); // 北向接口基类
+new Strategy(); // 策略相关
+```
+
 ### 使用方法
 
 ```php
 use func\src\Func;
+use srun\src\Srun;
 use srun\src\User;
 
-// 基本用法
+// 基本用法 (使用默认地址: https://127.0.0.1:8001/)
 $user = new User;
 $user->view('srun');
 
@@ -45,11 +63,15 @@ $user = new User;
 $user->setRdsConfig(['port' => 6380, 'host' => '127.0.0.1', 'pass' => 'xxx']);
 $user->view('srun');
 
+// 根据文档自行调用北向接口方式
+$srun = new Srun;
+$srun->req('path/to/api/addr', ['param1' => 'xxx', 'param2' => 'xxx'], 'post');
+
 ```
 
-> 新版缓存逻辑: srun4k环境: 自动设置为redis缓存(16382); 非srun4k环境: 自动设置为文件缓存
-
 ### 缓存类使用方法
+
+> 新版缓存逻辑: srun4k环境: 自动设置为redis缓存(16382); 非srun4k环境: 自动设置为文件缓存
 
 ```php
 /**
