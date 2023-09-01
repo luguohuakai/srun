@@ -95,9 +95,9 @@ class Cache
                 return (bool)$rs;
             case self::CACHE_REDIS:
                 if ($ttl > 0) {
-                    return Func::Rds(...$this->rds_config)->setEx($key, $ttl, $value);
+                    return Func::Rds(...array_values($this->rds_config))->setEx($key, $ttl, $value);
                 } elseif ($ttl == 0) {
-                    return Func::Rds(...$this->rds_config)->set($key, $value);
+                    return Func::Rds(...array_values($this->rds_config))->set($key, $value);
                 }
         }
         return false;
@@ -126,7 +126,7 @@ class Cache
                 }
                 return null;
             case self::CACHE_REDIS:
-                $rs = Func::Rds(...$this->rds_config)->get($key);
+                $rs = Func::Rds(...array_values($this->rds_config))->get($key);
                 if ($rs !== false) return $this->encrypt ? Func::ED($rs, 'D') : $rs;
                 return null;
         }
