@@ -6,7 +6,7 @@ use luguohuakai\func\Func;
 
 class Srun implements \srun\base\Srun
 {
-    private $srun_north_api_url = 'https://127.0.0.1:8001/';
+    protected $srun_north_api_url = 'https://127.0.0.1:8001/';
     private $srun_north_access_token = '';
     private $srun_north_access_token_expire = 7200;
     private $srun_north_access_token_redis_key = 'srun_north_access_token_redis';
