@@ -14,7 +14,7 @@
 * 如果要使用SDK请到srun4k 8080中配置北向接口权限
 * 支持的接口 随北向接口更新
 
-### 当前支持的北向接口有
+### 当前支持的北向接口有(V1)
 
 ```php
 new User(); // 用户相关
@@ -28,6 +28,22 @@ new Product(); // 产品相关
 new Setting(); // 设置相关
 new Srun(); // 北向接口基类
 new Strategy(); // 策略相关
+```
+
+### 支持北向接口V2(需按文档继续整理完善)
+
+```php
+new UserV2(); // 用户相关
+new AlipayV2(); // 支付相关
+new AuthV2(); // 鉴权相关
+new FinancialV2(); // 财务相关
+new GroupV2(); // 用户组相关
+new MessageV2(); // 消息相关
+new PackageV2(); // 套餐相关
+new ProductV2(); // 产品相关
+new SettingV2(); // 设置相关
+new SrunV2(); // 北向接口基类
+new StrategyV2(); // 策略相关
 ```
 
 ### 使用方法
