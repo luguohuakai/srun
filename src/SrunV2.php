@@ -6,13 +6,13 @@ use luguohuakai\func\Func;
 
 class SrunV2 extends Srun
 {
-    protected $app_id;
-    protected $app_secret;
-    private $srun_north_access_token_redis_key_v2 = 'srun_north_access_token_redis_v2';
+    protected string $app_id;
+    protected string $app_secret;
+    private string $srun_north_access_token_redis_key_v2 = 'srun_north_access_token_redis_v2';
 
-    public function __construct($srun_north_api_url = null, $srun_north_access_token = null, $srun_north_access_token_expire = null, $srun_north_access_token_redis_key = null)
+    public function __construct($srun_north_api_url = null)
     {
-        parent::__construct($srun_north_api_url, $srun_north_access_token, $srun_north_access_token_expire, $srun_north_access_token_redis_key);
+        parent::__construct($srun_north_api_url);
     }
 
     public function setAppId($app_id)

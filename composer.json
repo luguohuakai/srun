@@ -38,5 +38,10 @@
   },
   "config": {
     "process-timeout": 1800
+  },
+  "require-dev": {
+    "codeception/codeception": "^4.2",
+    "codeception/module-phpbrowser": "^1.0.0",
+    "codeception/module-asserts": "^1.0.0"
   }
 }

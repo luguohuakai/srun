@@ -40,6 +40,8 @@ class Srun implements \srun\base\Srun
             $this->default_log_path = '/srun3/log/srun/';
         }
 
+        if (PHP_OS === 'WINNT') $this->default_log_path = './log/';
+
         if (!is_dir($this->default_log_path)) mkdir($this->default_log_path, 0777, true);
     }
 
@@ -119,10 +121,10 @@ class Srun implements \srun\base\Srun
             $err_code = (int)$json->code;
             $err_msg = $json->message;
             if (in_array($err_code, array_keys(SrunError::$north))) $err_msg .= '-' . SrunError::$north[$err_code];
-            $this->logError('NORTH ERR - ' . $err_msg);
+            $this->logError('NORTH ERR - ' . json_encode($rs, JSON_UNESCAPED_UNICODE));
             return 'NORTH ERR - ' . $err_msg;
         }
-        $this->logError('NORTH INTERFACE UNKNOWN ERR');
+        $this->logError('NORTH INTERFACE UNKNOWN ERR: ', json_encode($rs, JSON_UNESCAPED_UNICODE));
         return 'NORTH INTERFACE UNKNOWN ERR';
     }
 
@@ -185,7 +187,7 @@ class Srun implements \srun\base\Srun
      */
     public function userRight($user_name, $pwd): bool
     {
-        $rs = $this->req('api/v1/user/validate-users', ['user_name' => $user_name, 'password' => $pwd], 'post');
+        $rs = $this->req('api/v1/user/validate-users', ['user_name' => $user_name, 'password' => md5($pwd)], 'post');
         return is_object($rs) && $rs->code === 0;
     }
 
