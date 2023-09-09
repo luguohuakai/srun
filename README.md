@@ -30,23 +30,23 @@ new Srun(); // 北向接口基类
 new Strategy(); // 策略相关
 ```
 
-### 支持北向接口V2(需按文档继续整理完善)
+### 支持北向接口V2
 
 ```php
-new SrunV2(); // 北向接口基类(基础服务 完成)
-new UserV2(); // 用户(用户相关 完成)
-new VisitorV2(); // 访客(访客相关 完成)
-new GroupV2(); // 用户组(用户组相关 完成)
-new BillingStrategyV2(); // 计费策略(计费策略相关 完成)
-new FinancialV2(); // 财务(财务相关 完成)
-new OnlineStrategyV2(); // 上网策略(用户上网策略相关 完成)
-new DeviceV2(); // 上网设备(上网设备相关 完成)
-new OnlineV2(); // 在线(在线相关 完成)
-new OnlineDetailV2(); // 上网明细(上网明细相关 完成)
-new MessageV2(); // 通知公告(通知公告相关 完成)
-new ManagerV2(); // 管理员(管理员相关 完成)
-new LogV2(); // 日志(日志相关 完成)
-new StatisticsV2(); // 统计(统计类接口 完成)
+new SrunV2(); // 基础服务
+new UserV2(); // 用户相关
+new VisitorV2(); // 访客相关
+new GroupV2(); // 用户组相关
+new BillingStrategyV2(); // 计费策略相关
+new FinancialV2(); // 财务相关
+new OnlineStrategyV2(); // 用户上网策略相关
+new DeviceV2(); // 上网设备相关
+new OnlineV2(); // 在线相关
+new OnlineDetailV2(); // 上网明细相关
+new MessageV2(); // 通知公告相关
+new ManagerV2(); // 管理员相关
+new LogV2(); // 日志相关
+new StatisticsV2(); // 统计类接口
 ```
 
 ### 使用方法
