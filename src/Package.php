@@ -82,7 +82,7 @@ class Package extends Srun implements \srun\base\Package
      */
     public function Batch($type, $package, $group_id = null, $product = null)
     {
-        $data = compact('type', $package);
+        $data = compact('type', 'package');
         if ($group_id !== null) $data['group_id'] = $group_id;
         if ($product !== null) $data['product'] = $product;
         return $this->req('api/v1/package/batch', $data, 'post');

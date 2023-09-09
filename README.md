@@ -45,9 +45,8 @@ new OnlineV2(); // 在线(在线相关 完成)
 new OnlineDetailV2(); // 上网明细(上网明细相关 完成)
 new MessageV2(); // 通知公告(通知公告相关 完成)
 new ManagerV2(); // 管理员(管理员相关 完成)
-
-new LogV2(); // 日志(日志相关)
-new StatisticsV2(); // 统计(统计类接口)
+new LogV2(); // 日志(日志相关 完成)
+new StatisticsV2(); // 统计(统计类接口 完成)
 ```
 
 ### 使用方法

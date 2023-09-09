@@ -71,7 +71,7 @@ class MessageV2 extends SrunV2
         if ($title !== null) $data['title'] = $title;
         if ($created_at !== null) $data['created_at'] = $created_at;
         if ($updated_at !== null) $data['updated_at'] = $updated_at;
-        if ($per_page !== null) $data['per_page'] = $per_page;
+        if ($per_page !== null) $data['per-page'] = $per_page;
         if ($page !== null) $data['page'] = $page;
         return $this->req('api/v2/message/new-message', $data);
     }

@@ -17,7 +17,7 @@ class ManagerV2 extends SrunV2
      */
     public function validateManager($username, $password)
     {
-        return $this->req('api/v2/user/validate-manager', compact('username', $password), 'post');
+        return $this->req('api/v2/user/validate-manager', compact('username', 'password'), 'post');
     }
 
     /**
@@ -28,7 +28,7 @@ class ManagerV2 extends SrunV2
      */
     public function addManager($username, $password)
     {
-        return $this->req('api/v2/user/add-manager', compact('username', $password), 'post');
+        return $this->req('api/v2/user/add-manager', compact('username', 'password'), 'post');
     }
 
     /**
