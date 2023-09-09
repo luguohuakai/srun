@@ -10,7 +10,7 @@ class FinancialV2 extends SrunV2
     }
 
     /**
-     * 电子钱包充值接口
+     * 电子钱包缴费接口
      * @param $user_name
      * @param int $pay_type_id
      * @param array $other
@@ -119,7 +119,7 @@ class FinancialV2 extends SrunV2
     }
 
     /**
-     * 缴纳开户费接口
+     * 交开户费/附加费用
      * 缴纳开户费接口前提: 用户的当前状态为 未开通 才可以缴纳开户费。缴纳完成后，系统自动将 未开通 状态 修正为 正常 状态
      * @param $extra_pay_id
      * @param array $other
@@ -131,9 +131,10 @@ class FinancialV2 extends SrunV2
     }
 
     /**
-     * 支付包/微信缴费数据同步
-     * 适用范围：比如用户已经对接了各缴费平台，比如微信企业号缴费。
-     * 用户在平台缴费成功后，只需要将缴费数据通过本接口同步重要参数即可在深澜系统进行电子钱包充值操作。
+     * 缴费数据同步<br>
+     * 支付包/微信缴费数据同步<br>
+     * 适用范围：比如用户已经对接了各缴费平台，比如微信企业号缴费。<br>
+     * 用户在平台缴费成功后，只需要将缴费数据通过本接口同步重要参数即可在深澜系统进行电子钱包充值操作。<br>
      * pay_type 参数非常重要， 请准确填写
      * @param $user_name
      * @param $trade_no
@@ -151,7 +152,7 @@ class FinancialV2 extends SrunV2
     }
 
     /**
-     * 缴费对账接口
+     * 财务缴费对账接口
      * @param $pay_type_id
      * @param $start_time
      * @param $stop_time
@@ -166,7 +167,7 @@ class FinancialV2 extends SrunV2
     }
 
     /**
-     * 查询缴费方式接口
+     * 缴费方式查询
      * @return object|string
      */
     public function payType()
@@ -217,7 +218,8 @@ class FinancialV2 extends SrunV2
     }
 
     /**
-     * 查询用充值卡充值流量包记录
+     * 套餐充流量包记录接口<br>
+     * 查询用充值卡充值流量包记录<br>
      * 使用流量卡为用户的流量套餐包充流量
      * @param $user_name
      * @param $start_at

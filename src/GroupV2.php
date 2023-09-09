@@ -19,19 +19,20 @@ class GroupV2 extends SrunV2
 
     /**
      * 查询用户组接口
-     * @param $name
+     * @param string|null $name 用户组名称 支持模糊查询
      * @param $id
      * @param $per_page
      * @param $page
      * @return object|string
      */
-    public function view($name = null, $id = null, $per_page = null, $page = null)
+    public function view(string $name = null, $id = null, $per_page = null, $page = null)
     {
         $data = [];
         if ($name !== null) $data['name'] = $name;
         if ($id !== null) $data['id'] = $id;
         if ($per_page !== null) $data['per-page'] = $per_page;
         if ($page !== null) $data['page'] = $page;
+
         return $this->req('api/v2/groups', $data);
     }
 

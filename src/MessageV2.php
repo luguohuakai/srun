@@ -12,7 +12,14 @@ class MessageV2 extends SrunV2
     /**
      * 发送通知消息接口
      * @param $account
+     * 发送 至 所有在线用户 account = {SRUN_ALL_ONLINE_USERS}<br>
+     * 发送 至 所有注册用户 account = {SRUN_ALL_REGISTER_USERS}<br>
+     * 发送 至 某一个用户 account = 具体用户的账号
      * @param $receive_type
+     * 通过 客户端 接收消息 receive_type = client<br>
+     * 通过 微信 接收消息 receive_type = weixin<br>
+     * 通过 短信 接收消息 receive_type = sms<br>
+     * 通过 邮件 接收消息 receive_type = email
      * @param $subject
      * @param $target
      * @param $product_id
@@ -41,14 +48,44 @@ class MessageV2 extends SrunV2
     }
 
     /**
-     * 查询通知公告接口,适配新版本自服务
-     * 本接口适配新版本自服务系统， 如果用户已经升级为新版本,则应尽快进行接口切换
-     * @param array $param
+     * 查询新版本消息<br>
+     * @param $id
+     * @param null $type
+     * type 参数说明<br>
+     * type = 0 认证通知<br>
+     * type = 1 认证消息公告<br>
+     * type = 2 自服务通知<br>
+     * type = 3 自服务通知公告<br>
+     * type = 4 客户端通知
+     * @param null $title
+     * @param null $created_at
+     * @param null $updated_at
+     * @param null $per_page
+     * @param null $page
      * @return object|string
      */
-    public function newMessage(array $param = [])
+    public function newMessage($id, $type = null, $title = null, $created_at = null, $updated_at = null, $per_page = null, $page = null)
     {
-        return $this->req('api/v2/message/new-message', $param);
+        $data = compact('id');
+        if ($type !== null) $data['type'] = $type;
+        if ($title !== null) $data['title'] = $title;
+        if ($created_at !== null) $data['created_at'] = $created_at;
+        if ($updated_at !== null) $data['updated_at'] = $updated_at;
+        if ($per_page !== null) $data['per_page'] = $per_page;
+        if ($page !== null) $data['page'] = $page;
+        return $this->req('api/v2/message/new-message', $data);
+    }
+
+    /**
+     * 查询通知公告接口,适配新版本自服务
+     * @param $type
+     * @param $title
+     * @return object|string
+     */
+    public function newMessage2($type, $title)
+    {
+        $data = compact('type', 'title');
+        return $this->req('api/v2/message/new-message', $data);
     }
 
     /**

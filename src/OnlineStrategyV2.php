@@ -2,7 +2,7 @@
 
 namespace srun\src;
 
-class ProductV2 extends SrunV2
+class OnlineStrategyV2 extends SrunV2
 {
     public function __construct($srun_north_api_url = null)
     {
@@ -10,50 +10,7 @@ class ProductV2 extends SrunV2
     }
 
     /**
-     * 增加产品接口
-     * @param $product_name
-     * @param $billing_id
-     * @param $control_id
-     * @param $binding_mode
-     * @param $checkout_mode
-     * @param $condition
-     * @return object|string
-     */
-    public function create($product_name, $billing_id, $control_id, $binding_mode, $checkout_mode, $condition)
-    {
-        $data = compact('billing_id', 'control_id', 'binding_mode', 'checkout_mode', 'condition');
-        $data['products_name'] = $product_name;
-        return $this->req('api/v2/product/create', $data, 'post');
-    }
-
-    /**
-     * 删除产品接口
-     * @param $product_id
-     * @return object|string
-     */
-    public function delete($product_id)
-    {
-        return $this->req('api/v2/product/delete', ['products_id' => $product_id], 'delete');
-    }
-
-    /**
-     * 修改产品接口
-     * @param int product_id
-     * @param string product_name
-     * @param string|int billing_id
-     * @param string|int control_id
-     * @param string binding_mode
-     * @param int checkout_mode
-     * @param string condition
-     * @return object|string
-     */
-    public function update($param = [])
-    {
-        return $this->req('api/v2/product/update', $param, 'put');
-    }
-
-    /**
-     * 可订购的产品
+     * 查询用户可订购的产品列表<br>
      * 此处管理可通过 8080 系统设置/自服务设置/修改产品设置 进行管理
      * @param $user_name
      * @return object|string
@@ -71,24 +28,6 @@ class ProductV2 extends SrunV2
     public function useNumber($product_id)
     {
         return $this->req('api/v2/product/use-number', ['products_id' => $product_id]);
-    }
-
-    /**
-     * 产品列表接口
-     * @return object|string
-     */
-    public function index()
-    {
-        return $this->req('api/v2/product/index');
-    }
-
-    /**
-     * @param $product_id
-     * @return object|string
-     */
-    public function view($product_id)
-    {
-        return $this->req('api/v2/product/view', ['products_id' => $product_id]);
     }
 
     /**
@@ -173,7 +112,7 @@ class ProductV2 extends SrunV2
     }
 
     /**
-     * 预约转移产品接口
+     * 产品转移(预约转移)
      * @param $user_name
      * @param $product_id_form
      * @param $product_id_to
@@ -190,7 +129,7 @@ class ProductV2 extends SrunV2
     }
 
     /**
-     * 取消预约转移产品接口
+     * 产品转移(取消预约转移)
      * @param $user_name
      * @param $product_id
      * @return object|string
@@ -201,14 +140,14 @@ class ProductV2 extends SrunV2
     }
 
     /**
-     * 取消产品接口
-     * 如果返回取消失败, 可以申请一线人员协助, 查一下账号所在用户组是否有操作该产品的权利
+     * 取消产品接口<br>
+     * 如果返回取消失败, 可以申请一线人员协助, 查一下账号所在用户组是否有操作该产品的权利<br>
      * 管理后台/系统设置/自服务设置/修改产品设置->点击目标用户组 即可查看该组可使用的产品
      * @param $user_name
      * @param $product_id
      * @return object|string
      */
-    public function cancel($user_name, $product_id)
+    public function cancelProduct($user_name, $product_id)
     {
         return $this->req('api/v2/product/cancel', ['user_name' => $user_name, 'products_id' => $product_id], 'delete');
     }
@@ -219,7 +158,7 @@ class ProductV2 extends SrunV2
      * @param $product_id
      * @return object|string
      */
-    public function disable($user_name, $product_id)
+    public function disableProduct($user_name, $product_id)
     {
         return $this->req('api/v2/product/disable-product', ['user_name' => $user_name, 'products_id' => $product_id], 'post');
     }
@@ -230,7 +169,7 @@ class ProductV2 extends SrunV2
      * @param $product_id
      * @return object|string
      */
-    public function enable($user_name, $product_id)
+    public function enableProduct($user_name, $product_id)
     {
         return $this->req('api/v2/product/enable-product', ['user_name' => $user_name, 'products_id' => $product_id], 'post');
     }
@@ -298,7 +237,7 @@ class ProductV2 extends SrunV2
     }
 
     /**
-     * 退费接口
+     * 产品退费接口
      * @param $user_name
      * @param $operate_type
      * @param $monthly_fee
@@ -311,5 +250,101 @@ class ProductV2 extends SrunV2
         if ($monthly_fee !== null) $data['monthly_fee'] = $monthly_fee;
         if ($product_id !== null) $data['products_id'] = $product_id;
         return $this->req('api/v2/product/refund', $data, 'post');
+    }
+
+    /**
+     * 查询已订购的产品/套餐【统计时长/流量包可用总和】
+     * @param $user_name
+     * @return object|string
+     */
+    public function userPackage($user_name)
+    {
+        return $this->req('api/v2/package/users-packages', ['user_name' => $user_name]);
+    }
+
+    /**
+     * 购买套餐接口
+     * @param $user_name
+     * @param $product
+     * @param $package
+     * @return object|string
+     */
+    public function Buy($user_name, $product, $package)
+    {
+        return $this->req('api/v2/package/buy', compact('user_name', 'product', 'package'), 'post');
+    }
+
+    /**
+     * 购买套餐 - 赠送<br>
+     * 购买套餐高级接口<br>
+     * 1、用户当前必须订购了相应的产品,才能进行购买套餐操作,否则无法进行<br>
+     * 2、本接口应用场景为 赠送套餐， 不收取用户费用
+     * @param $user_name
+     * @param $product
+     * @param $package
+     * @return object|string
+     */
+    public function BuySuper($user_name, $product, $package)
+    {
+        return $this->req('api/v2/package/buy-super', compact('user_name', 'product', 'package'), 'post');
+    }
+
+    /**
+     * 查询可购买的套餐接口
+     * @param $user_name
+     * @return object|string
+     */
+    public function package($user_name)
+    {
+        return $this->req('api/v2/packages', compact('user_name'));
+    }
+
+    /**
+     * 购买套餐接口二<br>
+     * 本接口融合了 电子钱包充值+订购套餐 两个接口，请求参数同样也分为两个部分<br>
+     * 电子钱包充值请求参数以及购买套餐请求参数，如有疑问可参考电子钱包缴费请求参数来填写
+     * @param $user_name
+     * @param $pay_type_id
+     * @param $pay_num
+     * @param $order_no
+     * @param $product
+     * @param $package
+     * @return object|string
+     */
+    public function Buy2($user_name, $pay_type_id, $pay_num, $order_no, $product, $package)
+    {
+        return $this->req('api/v2/package/buys', compact('user_name', 'pay_type_id', 'pay_num', 'order_no', 'product', 'pay_num'), 'post');
+    }
+
+    /**
+     * 购买套餐批处理<br>
+     * type 字段说明<br>
+     * type = group_id 批量为 一个或多个用户组 下面的用户购买套餐, 此时 group_id 必填, product 字段如果不填写 系统会为用户正在使用的产品订购套餐<br>
+     * type = product 批量为已经订购 某一个产品 的所有用户购买套餐,此时 group_id 不填
+     * @param $type
+     * @param $package
+     * @param $group_id
+     * @param $product
+     * @return object|string
+     */
+    public function Batch($type, $package, $group_id = null, $product = null)
+    {
+        $data = compact('type', 'package');
+        if ($group_id !== null) $data['group_id'] = $group_id;
+        if ($product !== null) $data['product'] = $product;
+        return $this->req('api/v2/package/batch', $data, 'post');
+    }
+
+    /**
+     * 查询用户订购的产品是否绑定运营商账号
+     * @param $user_name
+     * @param $products_id
+     * @return object|string
+     */
+    public function searchMobilePhone($user_name, $products_id = null)
+    {
+        $data = compact('user_name');
+        if ($products_id !== null) $data['products_id'] = $products_id;
+        return $this->req('api/v2/user/search-mobile-phone', $data);
     }
 }

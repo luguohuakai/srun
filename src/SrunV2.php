@@ -39,7 +39,7 @@ class SrunV2 extends Srun
         $method = strtolower($method);
         $srun_north_api_url = $this->srun_north_api_url;
         if (!$srun_north_api_url) {
-            $this->logError('NORTH INTERFACE ERR');
+            $this->logError('NORTH INTERFACE V2 ERR');
             return 'NORTH INTERFACE ERR';
         }
         $url = "$srun_north_api_url$path";
@@ -47,7 +47,7 @@ class SrunV2 extends Srun
         if ($access_token === true) {
             $srun_north_access_token = $this->accessToken();
             if (!$srun_north_access_token) {
-                $this->logError('NORTH INTERFACE ACCESS_TOKEN ERR');
+                $this->logError('NORTH INTERFACE V2 ACCESS_TOKEN ERR');
                 return 'NORTH INTERFACE ACCESS_TOKEN ERR';
             }
             if ($method === 'get') $url = "$url?access_token=$srun_north_access_token";
@@ -59,7 +59,7 @@ class SrunV2 extends Srun
         $rs = Func::$method($url, $data, $header);
 
         if (!$rs) {
-            $this->logError('NORTH INTERFACE REQUEST ERR');
+            $this->logError('NORTH INTERFACE V2 REQUEST ERR');
             return 'NORTH INTERFACE REQUEST ERR';
         }
         if (is_object($rs) && isset($rs->_err)) {
@@ -69,7 +69,7 @@ class SrunV2 extends Srun
         $json = is_object($rs) ? $rs : json_decode($rs);
         $json = is_object($json) ? $json : json_decode($json);
         if (!is_object($json)) {
-            $this->logError('RESULT DECODE ERR');
+            $this->logError('RESULT DECODE ERR V2');
             return 'RESULT DECODE ERR';
         }
         if (isset($json->code) && $json->code == 0) {
@@ -80,10 +80,10 @@ class SrunV2 extends Srun
             $err_code = (int)$json->code;
             $err_msg = $json->message;
             if (in_array($err_code, array_keys(SrunError::$north))) $err_msg .= '-' . SrunError::$north[$err_code];
-            $this->logError('NORTH ERR - ' . $err_msg);
+            $this->logError('NORTH ERR V2 - ' . json_encode($json, JSON_UNESCAPED_UNICODE));
             return 'NORTH ERR - ' . $err_msg;
         }
-        $this->logError('NORTH INTERFACE UNKNOWN ERR');
+        $this->logError('NORTH INTERFACE V2 UNKNOWN ERR');
         return 'NORTH INTERFACE UNKNOWN ERR';
     }
 

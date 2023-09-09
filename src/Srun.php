@@ -121,7 +121,7 @@ class Srun implements \srun\base\Srun
             $err_code = (int)$json->code;
             $err_msg = $json->message;
             if (in_array($err_code, array_keys(SrunError::$north))) $err_msg .= '-' . SrunError::$north[$err_code];
-            $this->logError('NORTH ERR - ' . json_encode($rs, JSON_UNESCAPED_UNICODE));
+            $this->logError('NORTH ERR - ' . json_encode($json, JSON_UNESCAPED_UNICODE));
             return 'NORTH ERR - ' . $err_msg;
         }
         $this->logError('NORTH INTERFACE UNKNOWN ERR: ', json_encode($rs, JSON_UNESCAPED_UNICODE));
