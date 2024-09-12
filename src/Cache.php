@@ -14,7 +14,7 @@ class Cache
     private $cache_type;
     private $in_srun4k = false;
 
-    private $cache_file = './srun_cache';
+    private $cache_file = './srun_cache'; // 默认缓存文件位置可能没有权限
 
     private $rds_config = [
         'index' => 0,
@@ -113,7 +113,7 @@ class Cache
         switch ($this->cache_type) {
             case self::CACHE_FILE:
                 if (!file_exists($this->cache_file)) @touch($this->cache_file);
-                $str = file_get_contents($this->cache_file);
+                $str = @file_get_contents($this->cache_file);
                 if ($str) {
                     $_arr = json_decode($str, true);
                     if ($_arr && is_array($_arr)) {

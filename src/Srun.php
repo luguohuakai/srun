@@ -13,8 +13,8 @@ class Srun implements \srun\base\Srun
     private $use_this_rds = false;
     // 默认使用Cache类管理缓存
     public $cache = true;
-    public $cache_file = '';
-    private $default_log_path = '/var/log/srun/';
+    public $cache_file = ''; // 自定义缓存文件 全路径
+    private $default_log_path = '/var/log/srun/'; // 如果默认位置没有权限 需要自定义日志文件路径
     private $rds_config = [
         'index' => 0,
         'port' => 6379,
