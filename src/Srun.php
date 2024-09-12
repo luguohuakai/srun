@@ -21,6 +21,24 @@ class Srun implements \srun\base\Srun
         'pass' => null,
     ];
 
+    public $errors = [];
+
+    public function hasError()
+    {
+        return !empty($this->errors);
+    }
+
+    public function firstError()
+    {
+        if ($this->hasError()) return $this->errors[0];
+        return '';
+    }
+
+    public function addError($error)
+    {
+        $this->errors[] = $error;
+    }
+
     public function __construct($srun_north_api_url = null, $srun_north_access_token = null, $srun_north_access_token_expire = null, $srun_north_access_token_redis_key = null)
     {
         if ($srun_north_api_url) $this->srun_north_api_url = $srun_north_api_url;
@@ -42,7 +60,12 @@ class Srun implements \srun\base\Srun
 
         if (PHP_OS === 'WINNT') $this->default_log_path = './log/';
 
-        if (!is_dir($this->default_log_path)) mkdir($this->default_log_path, 0777, true);
+        if (!is_dir($this->default_log_path)) @mkdir($this->default_log_path, 0777, true);
+    }
+
+    public function setDefaultLogPath($path)
+    {
+        $this->default_log_path = $path;
     }
 
     /**
@@ -532,6 +555,7 @@ class Srun implements \srun\base\Srun
      */
     public function logError($msg, string $category = 'app')
     {
+        $this->addError($msg);
         $this->srunLog($msg, 'error', $category);
     }
 
@@ -547,6 +571,6 @@ class Srun implements \srun\base\Srun
         if (is_array($msg) || is_object($msg)) $msg = json_encode($msg, JSON_UNESCAPED_UNICODE);
         $msg = mb_substr($msg, 0, 1000);
         $msg = date('Y-m-d H:i:s') . " [$level] [$category] $msg" . PHP_EOL;
-        file_put_contents($this->default_log_path . $type . date('Ym') . '.log', $msg, FILE_APPEND);
+        @file_put_contents($this->default_log_path . $type . date('Ym') . '.log', $msg, FILE_APPEND);
     }
 }
