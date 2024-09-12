@@ -34,6 +34,12 @@ class Srun implements \srun\base\Srun
         return '';
     }
 
+    public function lastError()
+    {
+        if ($this->hasError()) return $this->errors[count($this->errors) - 1];
+        return '';
+    }
+
     public function addError($error)
     {
         $this->errors[] = $error;
@@ -145,6 +151,7 @@ class Srun implements \srun\base\Srun
             $err_msg = $json->message;
             if (in_array($err_code, array_keys(SrunError::$north))) $err_msg .= '-' . SrunError::$north[$err_code];
             $this->logError('NORTH ERR - ' . json_encode($json, JSON_UNESCAPED_UNICODE));
+            $this->addError($err_msg);
             return 'NORTH ERR - ' . $err_msg;
         }
         $this->logError('NORTH INTERFACE UNKNOWN ERR: ', json_encode($rs, JSON_UNESCAPED_UNICODE));
