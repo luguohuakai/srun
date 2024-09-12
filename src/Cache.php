@@ -112,7 +112,7 @@ class Cache
     {
         switch ($this->cache_type) {
             case self::CACHE_FILE:
-                if (!file_exists($this->cache_file)) touch($this->cache_file);
+                if (!file_exists($this->cache_file)) @touch($this->cache_file);
                 $str = file_get_contents($this->cache_file);
                 if ($str) {
                     $_arr = json_decode($str, true);

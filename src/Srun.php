@@ -13,6 +13,7 @@ class Srun implements \srun\base\Srun
     private $use_this_rds = false;
     // 默认使用Cache类管理缓存
     public $cache = true;
+    public $cache_file = '';
     private $default_log_path = '/var/log/srun/';
     private $rds_config = [
         'index' => 0,
@@ -183,7 +184,7 @@ class Srun implements \srun\base\Srun
             }
         } else {
             cache:
-            $cache = new Cache;
+            $cache = new Cache(0, $this->cache_file);
             $access_token = $cache->get($this->srun_north_access_token_redis_key);
             if ($access_token) return $access_token;
             $rs = $this->req('api/v1/auth/get-access-token', [], 'get', false);

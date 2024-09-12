@@ -89,7 +89,7 @@ class SrunV2 extends Srun
 
     public function accessToken()
     {
-        $cache = new Cache;
+        $cache = new Cache(0, $this->cache_file);
         $access_token = $cache->get($this->srun_north_access_token_redis_key_v2);
         if ($access_token) return $access_token;
         $rs = $this->req('api/v2/auth/get-access-token', ['appId' => $this->app_id, 'appSecret' => $this->app_secret], 'post', false);
