@@ -206,7 +206,7 @@ class Srun implements \srun\base\Srun
      */
     public function userExist($user_name): bool
     {
-        $rs = $this->req('api/v1/user/search', ['value' => $user_name, 'type' => 1]);
+        $rs = $this->req('api/v1/user/search', ['value' => $user_name, 'type' => 1, 'field' => 'user_name']);
         return is_object($rs) && $rs->code === 0;
     }
 
