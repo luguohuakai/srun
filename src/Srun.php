@@ -23,6 +23,11 @@ class Srun implements \srun\base\Srun
     ];
 
     public $errors = [];
+    /**
+     * 北向接口返回的code
+     * @var null
+     */
+    public $north_code = null;
 
     public function hasError()
     {
@@ -143,6 +148,7 @@ class Srun implements \srun\base\Srun
             $this->logError('RESULT DECODE ERR');
             return 'RESULT DECODE ERR';
         }
+        if (isset($json->code)) $this->north_code = $json->code;
         if (isset($json->code) && $json->code == 0) {
             $this->logInfo("$method|$url|" . json_encode($json, JSON_UNESCAPED_UNICODE), 'response');
             return $json;
