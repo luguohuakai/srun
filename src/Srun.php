@@ -29,6 +29,25 @@ class Srun implements \srun\base\Srun
      */
     public $north_code = null;
 
+    /**
+     * 设置北向接口地址
+     * @param string $north_api_url
+     * @return void
+     */
+    public function setAddress($north_api_url)
+    {
+        if (substr($north_api_url, -1) != '/') $north_api_url .= '/';
+        $this->srun_north_api_url = $north_api_url;
+    }
+
+    /**
+     * 当存在调用多个北向接口服务器时必须调用此设置
+     * @return void
+     */
+    public function setMulti() {
+        $this->srun_north_access_token_redis_key .= md5($this->srun_north_api_url);
+    }
+
     public function hasError()
     {
         return !empty($this->errors);
@@ -54,6 +73,7 @@ class Srun implements \srun\base\Srun
     public function __construct($srun_north_api_url = null, $srun_north_access_token = null, $srun_north_access_token_expire = null, $srun_north_access_token_redis_key = null)
     {
         if ($srun_north_api_url) $this->srun_north_api_url = $srun_north_api_url;
+        if (substr($this->srun_north_api_url, -1) != '/') $this->srun_north_api_url .= '/';
         if ($srun_north_access_token) $this->srun_north_access_token = $srun_north_access_token;
         if ($srun_north_access_token_expire) $this->srun_north_access_token_expire = $srun_north_access_token_expire;
         if ($srun_north_access_token_redis_key) $this->srun_north_access_token_redis_key = $srun_north_access_token_redis_key;

@@ -26,6 +26,14 @@ class SrunV2 extends Srun
     }
 
     /**
+     * 当存在调用多个北向接口服务器时必须调用此设置
+     * @return void
+     */
+    public function setMulti() {
+        $this->srun_north_access_token_redis_key_v2 .= md5($this->app_id . $this->srun_north_api_url);
+    }
+
+    /**
      * 发起curl请求
      * @param $path
      * @param array $data
